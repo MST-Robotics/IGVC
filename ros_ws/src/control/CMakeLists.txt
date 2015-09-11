@@ -102,10 +102,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES control
-#  CATKIN_DEPENDS geometry_msgs joy roscpp std_msgs
-#  DEPENDS system_lib
+    INCLUDE_DIRS include
+    LIBRARIES control
+    CATKIN_DEPENDS geometry_msgs joy roscpp std_msgs sensor_msgs
+    DEPENDS system_lib
 )
 
 ###########
@@ -117,6 +117,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  include/control/
 )
 
 ## Declare a C++ library
@@ -130,16 +131,16 @@ include_directories(
 # add_dependencies(control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(control_node src/control_node.cpp)
+add_executable(control_node src/remote_control_node.cpp src/remote_control.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(control_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(control_node
+    ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
