@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 2.8.3)
 project(control)
 
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
-  roscpp
-  std_msgs
-  sensor_msgs
+    geometry_msgs
+    roscpp
+    std_msgs
+    sensor_msgs
 )
 
 ################################################
@@ -30,8 +30,8 @@ catkin_package(
 ## Build ##
 ###########
 include_directories(
-  ${catkin_INCLUDE_DIRS}
-  include/control/
+    ${catkin_INCLUDE_DIRS}
+    include/control/
 )
 
 

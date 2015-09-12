@@ -7,17 +7,16 @@
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "teleop_control");
+    ros::init(argc, argv, "teleop_control");
 
-  RemoteControl con;
+    RemoteControl con;
 
-  ros::Rate loop_rate(30);
+    ros::Rate loop_rate(30);
 
-  while(ros::ok())
-  {
-    con.update();
-    ros::spinOnce();
-  }
+    while (ros::ok())
+    {
+        con.update();
+        ros::spinOnce();
+    }
 }
-
 
