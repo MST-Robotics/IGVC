@@ -3,7 +3,6 @@ project(control)
 
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
-  joy
   roscpp
   std_msgs
   sensor_msgs
@@ -23,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES control
-    CATKIN_DEPENDS geometry_msgs joy roscpp std_msgs sensor_msgs
+    CATKIN_DEPENDS geometry_msgs roscpp std_msgs sensor_msgs
     DEPENDS system_lib
 )
 
