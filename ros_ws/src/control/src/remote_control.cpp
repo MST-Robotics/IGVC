@@ -7,6 +7,9 @@
 
 #include "remote_control.h"
 
+const std::string JOY_TOPIC = "joy";
+const std::string TELEOP_TOPIC = "teleop_twist";
+
 RemoteControl::RemoteControl()
 {
     // Initialize cmd_vel to 0
@@ -17,8 +20,8 @@ RemoteControl::RemoteControl()
     cmd_vel.angular.y = 0;
     cmd_vel.angular.z = 0;
 
-    joy_sub = nh.subscribe<sensor_msgs::Joy>("joy", 1, &RemoteControl::joyCallback, this);
-    twist_pub = nh.advertise<geometry_msgs::Twist>("teleop_twist", 1);
+    joy_sub = nh.subscribe<sensor_msgs::Joy>(JOY_TOPIC, 1, &RemoteControl::joyCallback, this);
+    twist_pub = nh.advertise<geometry_msgs::Twist>(TELEOP_TOPIC, 1);
 }
 
 RemoteControl::RemoteControl(std::string twist_topic, std::string joy_topic)
@@ -37,8 +40,8 @@ RemoteControl::RemoteControl(std::string twist_topic, std::string joy_topic)
 
 void RemoteControl::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
-    cmd_vel.linear.x = msg->axes[1];
-    cmd_vel.angular.z = msg->axes[2];
+    cmd_vel.linear.x = msg->axes[Y_AXIS_L_STICK];
+    cmd_vel.angular.z = msg->axes[X_AXIS_R_STICK];
 }
 
 void RemoteControl::update()

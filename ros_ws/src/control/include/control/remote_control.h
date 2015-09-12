@@ -15,6 +15,18 @@
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
 
+#define Y_AXIS_L_STICK 1
+#define X_AXIS_R_STICK 2
+
+/**
+ * @brief The topic that joy messages will be received from
+ */
+extern const std::string JOY_TOPIC;
+/**
+ * @brief The topic that twist messages will be published on
+ */
+extern const std::string TELEOP_TOPIC;
+
 class RemoteControl
 {
 private:
@@ -45,6 +57,16 @@ private:
      */
     ros::NodeHandle nh;
 
+    /**
+     * @brief The callback function for joy messages
+     *
+     * This function accepts joy messages and converts them into a twist format in the form of cmd_vel.  It will change
+     * the linear.x and angular.z velocities of the cmd_vel variable.
+     *
+     * @param msg The message which is received from the joy publisher
+     */
+    void joyCallback(const sensor_msgs::Joy::ConstPtr& msg);
+
 public:
     /**
      * @brief The RemoteControl default constructor
@@ -64,16 +86,6 @@ public:
      * @param joy_topic The topic to subscribe to for the joy messages
      */
     RemoteControl(std::string twist_topic, std::string joy_topic);
-
-    /**
-     * @brief The callback function for joy messages
-     *
-     * This function accepts joy messages and converts them into a twist format in the form of cmd_vel.  It will change
-     * the linear.x and angular.z velocities of the cmd_vel variable.
-     *
-     * @param msg The message which is received from the joy publisher
-     */
-    void joyCallback(const sensor_msgs::Joy::ConstPtr& msg);
 
     /**
      * @brief Updates the message which is being published
