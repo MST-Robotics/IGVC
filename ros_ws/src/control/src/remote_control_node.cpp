@@ -19,6 +19,7 @@ int main(int argc, char** argv)
     {
         con.update();
         ros::spinOnce();
+        loop_rate.sleep();
     }
 }
 
