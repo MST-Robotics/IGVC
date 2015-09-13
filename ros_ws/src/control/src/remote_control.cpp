@@ -7,6 +7,9 @@
 
 #include "remote_control.h"
 
+const int Y_AXIS_L_STICK = 1;
+const int X_AXIS_R_STICK = 2;
+
 const std::string JOY_TOPIC = "joy";
 const std::string TELEOP_TOPIC = "teleop_twist";
 
