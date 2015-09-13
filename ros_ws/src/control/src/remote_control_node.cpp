@@ -4,16 +4,15 @@
  */
 
 #include "remote_control.h"
-
-const std::string G_TELEOP_TOPIC = "teleop_control";
+#include "constants.h"
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, G_TELEOP_TOPIC);
+    ros::init(argc, argv, TELEOP_NODE);
 
     RemoteControl con;
 
-    ros::Rate loop_rate(30);
+    ros::Rate loop_rate(LOOP_RATE);
 
     while (ros::ok())
     {

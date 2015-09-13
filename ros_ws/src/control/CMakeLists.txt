@@ -24,6 +24,7 @@ catkin_package(
 include_directories(
     ${catkin_INCLUDE_DIRS}
     include/control/
+    ../common/
 )
 
 add_executable(control_node src/remote_control_node.cpp src/remote_control.cpp)

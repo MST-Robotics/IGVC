@@ -14,24 +14,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
-
-/**
- * @brief The index of the y axis on the left stick of the controller
- */
-extern const int Y_AXIS_L_STICK;
-/**
- * @brief The index of the x axis on the right stick of the controller
- */
-extern const int X_AXIS_R_STICK;
-
-/**
- * @brief The topic that joy messages will be received from
- */
-extern const std::string JOY_TOPIC;
-/**
- * @brief The topic that twist messages will be published on
- */
-extern const std::string TELEOP_TOPIC;
+#include "constants.h"
 
 class RemoteControl
 {
