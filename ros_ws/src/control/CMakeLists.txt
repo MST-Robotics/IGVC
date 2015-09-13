@@ -8,14 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
     sensor_msgs
 )
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
-
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -34,17 +26,8 @@ include_directories(
     include/control/
 )
 
-
 add_executable(control_node src/remote_control_node.cpp src/remote_control.cpp)
 add_dependencies(control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(control_node
     ${catkin_LIBRARIES}
 )
-
-#############
-## Install ##
-#############
-
-#############
-## Testing ##
-#############
