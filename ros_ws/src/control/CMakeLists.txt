@@ -27,8 +27,14 @@ include_directories(
     ../common/
 )
 
-add_executable(control_node src/remote_control_node.cpp src/remote_control.cpp)
-add_dependencies(control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(control_node
+add_executable(remote_control_node src/remote_control_node.cpp src/remote_control.cpp)
+add_dependencies(remote_control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(remote_control_node 
+    ${catkin_LIBRARIES}
+)
+
+add_executable(teleop_mux_node src/control/twist_mux_node.cpp src/control/twist_mux.cpp)
+add_dependencies(teleop_mux_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(teleop_mux_node 
     ${catkin_LIBRARIES}
 )
