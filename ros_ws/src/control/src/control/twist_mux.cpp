@@ -14,25 +14,35 @@ TwistMux::TwistMux()
 
     //Setup publishers and subscribers
     joy_sub = nh.subscribe<sensor_msgs::Joy>(JOY_TOPIC, 1, &TwistMux::joyCallback, this);
-    teleop_sub = nh.subscribe<geometry_msgs::Twist>(TELEOP_TOPIC, 1, &TwistMux::twistCallback, this);
-    autonomous_sub = nh.subscribe<geometry_msgs::Twist>(AUTO_TOPIC, 1, &TwistMux::twistCallback, this);
 
     twist_pub = nh.advertise<geometry_msgs::Twist>(CONTROL_TOPIC, 1);
 }
 
 void TwistMux::update()
 {
-
+    twist_pub.publish(cmd_vel);
 }
 
 void TwistMux::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
     if(msg->buttons[B_BUTTON] == 1)
+    {
         current_mode = Control::standby;
+        stopRobot();
+        twist_sub = nh.subscribe<geometry_msgs::Twist>(AUTO_TOPIC, 1, &TwistMux::twistCallback, this);
+    }
     else if(msg->buttons[A_BUTTON] == 1)
+    {
         current_mode = Control::teleop;
+        stopRobot();
+        twist_sub = nh.subscribe<geometry_msgs::Twist>(TELEOP_TOPIC, 1, &TwistMux::twistCallback, this);
+    }
     else if(msg->buttons[Y_BUTTON] == 1)
+    {
         current_mode = Control::autonomous;
+        stopRobot();
+        twist_sub.shutdown();
+    }
 }
 
 void TwistMux::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)

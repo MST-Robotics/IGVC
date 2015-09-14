@@ -57,12 +57,7 @@ private:
     /**
      * @brief The subscriber which receives twist messages from the teleop node
      */
-    ros::Subscriber teleop_sub;
-
-    /**
-     * @brief The subscriber which receives twist messages from the autonomous node
-     */
-    ros::Subscriber autonomous_sub;
+    ros::Subscriber twist_sub;
 
     /**
      * @brief The twist message publisher
