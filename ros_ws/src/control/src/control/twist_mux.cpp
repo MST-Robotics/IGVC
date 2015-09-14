@@ -17,7 +17,7 @@ TwistMux::TwistMux()
     teleop_sub = nh.subscribe<geometry_msgs::Twist>(TELEOP_TOPIC, 1, &TwistMux::twistCallback, this);
     autonomous_sub = nh.subscribe<geometry_msgs::Twist>(AUTO_TOPIC, 1, &TwistMux::twistCallback, this);
 
-    twist_pub = nh.advertise<geometry_msgs::Twist>(CMD_VEL_TOPIC, 1);
+    twist_pub = nh.advertise<geometry_msgs::Twist>(CONTROL_TOPIC, 1);
 }
 
 void TwistMux::update()

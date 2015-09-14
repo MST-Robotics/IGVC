@@ -48,7 +48,7 @@ const std::string AUTO_TOPIC = "auto_twist";
 /**
  * @brief The topic containing twist messages to be sent to the motor controller
  */
-const std::string CMD_VEL_TOPIC = "cmd_vel";
+const std::string CONTROL_TOPIC = "cmd_vel";
 
 //Node name constants
 /**
