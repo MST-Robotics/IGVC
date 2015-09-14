@@ -17,9 +17,11 @@
 #include <geometry_msgs/Twist.h>
 #include "constants.h"
 
-class TwistMux
+/**
+ * @brief Control namespace
+ */
+namespace Control
 {
-private:
     /**
      * @brief An enumerator to describe the mode the robot is currently in
      */
@@ -29,11 +31,15 @@ private:
         teleop,         //!< The robot is currently being controlled by remote control
         autonomous      //!< The robot is driving itself
     };
+}
 
+class TwistMux
+{
+private:
     /**
      * @brief The mode which the robot is currently in
      */
-    Mode current_mode;
+    Control::Mode current_mode;
 
     /**
      * @brief The twist message which is sent to the motor controllers of the robot

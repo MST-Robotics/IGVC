@@ -9,7 +9,7 @@
 TwistMux::TwistMux()
 {
     //Ensure that the robot starts in a safe standby mode
-    current_mode = standby;
+    current_mode = Control::standby;
     stopRobot();
 
     //Setup publishers and subscribers
@@ -28,30 +28,20 @@ void TwistMux::update()
 void TwistMux::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
     if(msg->buttons[B_BUTTON] == 1)
-        current_mode = standby;
+        current_mode = Control::standby;
     else if(msg->buttons[A_BUTTON] == 1)
-        current_mode = teleop;
+        current_mode = Control::teleop;
     else if(msg->buttons[Y_BUTTON] == 1)
-        current_mode = autonomous;
+        current_mode = Control::autonomous;
 }
 
 void TwistMux::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
-    cmd_vel.linear.x = msg->linear.x;
-    cmd_vel.linear.y = msg->linear.y;
-    cmd_vel.linear.z = msg->linear.z;
-    cmd_vel.angular.x = msg->angular.x;
-    cmd_vel.angular.y = msg->angular.y;
-    cmd_vel.angular.z = msg->angular.z;
+    cmd_vel = *msg;
 }
 
 void TwistMux::stopRobot()
 {
-    cmd_vel.linear.x = 0;
-    cmd_vel.linear.y = 0;
-    cmd_vel.linear.z = 0;
-    cmd_vel.angular.x = 0;
-    cmd_vel.angular.y = 0;
-    cmd_vel.angular.z = 0;
+    cmd_vel = geometry_msgs::Twist();
 }
 
