@@ -33,6 +33,9 @@ const std::string TELEOP_TOPIC = "teleop_twist";
 const std::string TELEOP_NODE = "teleop_control";
 
 //Loop rate
+/**
+ * @brief The rate that the loops will run at in Hz
+ */
 const int LOOP_RATE = 30;
 
 #endif /* COMMON_CONSTANTS_H_ */

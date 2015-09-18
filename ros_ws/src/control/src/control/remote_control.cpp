@@ -1,5 +1,5 @@
 /**
- * @file RemoteControl.cpp
+ * @file remote_control.cpp
  * @brief The implementation file for the RemoteControl class
  *
  * This file implements the functions defined in RemoteControl.h
