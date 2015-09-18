@@ -1,5 +1,5 @@
 /**
- * @file RemoteControl.h
+ * @file remote_control.h
  * @class RemoteControl
  * @brief The class which converts joy messages to twist
  *
