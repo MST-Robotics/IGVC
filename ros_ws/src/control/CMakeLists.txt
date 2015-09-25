@@ -27,7 +27,7 @@ include_directories(
     ../common/
 )
 
-add_executable(remote_control_node src/remote_control_node.cpp src/remote_control.cpp)
+add_executable(remote_control_node src/control/remote_control_node.cpp src/control/remote_control.cpp)
 add_dependencies(remote_control_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(remote_control_node 
     ${catkin_LIBRARIES}
