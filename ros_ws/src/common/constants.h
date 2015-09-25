@@ -25,6 +25,10 @@ const std::string JOY_TOPIC = "joy";
  * @brief The topic that twist messages will be published on
  */
 const std::string TELEOP_TOPIC = "teleop_twist";
+/**
+ * @brief The topic that velocity messages will be published on
+ */
+const std::string VELOCITY_TOPIC = "wheel_velocity";
 
 //Node name constants
 /**
