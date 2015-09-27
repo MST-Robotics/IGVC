@@ -9,7 +9,7 @@
 
 #include <ros.h>
 #include <std_msgs/Float64.h>
-#include <common/constants.h>
+//#include <common/constants.h>
 
 /*************
  * Constants *
@@ -21,12 +21,12 @@
 const float PI_CONST = 3.14159265359;
  
 /**
- * @brief Radians Per Second at full Throtall
+ * @brief Radians Per Second at full Throtle
  */
 const float MAX_RAD_SEC = (8*PI_CONST);
 
 /**
- * @brief Pins used to controll the Motor
+ * @brief Pins used to control the Motor
  */
 const int FORWARD_PWM_PIN = 3;
 const int REVERSE_PWM_PIN = 4;
@@ -45,7 +45,7 @@ ros::NodeHandle nodeHandle;
 /**
  * @brief ROS Subscriber for the Velocity Message
  */
-ros::Subscriber<std_msgs::Float64> velocitySub(VELOCITY_TOPIC, &VelocityCallback);
+ros::Subscriber<std_msgs::Float64> velocitySub("wheel_velocity", &velocityCallback);
 
 /**
  * @brief The callback function for velocity messages
