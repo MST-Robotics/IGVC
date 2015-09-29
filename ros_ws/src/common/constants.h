@@ -49,6 +49,14 @@ const std::string AUTO_TOPIC = "auto_twist";
  * @brief The topic containing twist messages to be sent to the motor controller
  */
 const std::string CONTROL_TOPIC = "cmd_vel";
+/**
+ * @brief The topic that the right wheel angular velocity will be published on
+ */
+const std::string RIGHT_VEL_TOPIC = "right_vel";
+/**
+ * @brief The topic that the left wheel angular velocity will be published on
+ */
+const std::string LEFT_VEL_TOPIC = "left_vel";
 
 //Node name constants
 /**
@@ -59,11 +67,26 @@ const std::string TELEOP_NODE = "teleop_control";
  * @brief The node name for the teleop_mux node
  */
 const std::string TELEOP_MUX_NODE = "teleop_mux_node";
+/**
+ * @brief The node name for the motor_controller node
+ */
+const std::string MOTOR_CONTROLLER_NODE = "motor_controller_node";
 
 //Loop rate
 /**
  * @brief The rate that the loops will run at in Hz
  */
 const int LOOP_RATE = 30;
+
+//Robot Parameters
+/**
+ * @brief The robots diameter from right wheel to left wheel
+ */
+const double ROBOT_BASE = 0.7;
+/**
+ * @brief The radius of the robot's wheels
+ */
+const double WHEEL_RAD = 0.19;
+
 
 #endif /* COMMON_CONSTANTS_H_ */
