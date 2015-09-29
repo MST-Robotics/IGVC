@@ -3,6 +3,7 @@
  * @brief The main file for the remote control node
  */
 
+#include <ros/ros.h>
 #include "remote_control.h"
 #include "constants.h"
 
