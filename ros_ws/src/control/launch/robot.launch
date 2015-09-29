@@ -1,0 +1,18 @@
+<launch>
+    <!-- Define arguments and defaults -->
+    <arg name="robot_addr" default="localhost"/>
+
+    <!-- Connect to the specified master -->
+    <env name="ROS_MASTER_URI" value="http://$(arg robot_addr):11311"/>
+    
+    <!-- Launch joy_node -->
+    <node pkg="joy" type="joy_node" name="joy_node" respawn="true">
+        <param name="deadzone" value=".1"/>
+    </node>
+    
+    <!-- Launch teleop configuration -->
+    <node pkg="control" type="remote_control_node" name="remote_control_node"/>
+    <node pkg="control" type="teleop_mux_node" name="teleop_mux_node"/>
+    <node pkg="control" type="motor_controller_node" name="motor_controller_node"/>
+    
+</launch>
