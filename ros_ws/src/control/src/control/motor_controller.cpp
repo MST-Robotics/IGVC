@@ -15,8 +15,18 @@ MotorController::MotorController()
 
 void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
-    right_vel.data = (2 * msg->linear.x + msg->angular.z * ROBOT_BASE) / (2 * WHEEL_RAD);
-    left_vel.data = (2 * msg->linear.x + msg->angular.z * ROBOT_BASE) / (2 * WHEEL_RAD);
+    right_vel.data = getRightVel(msg->linear.x, msg->angular.z);
+    left_vel.data = getLeftVel(msg->linear.x, msg->angular.z);
+}
+
+double MotorController::getRightVel(const double lin_vel, const double ang_vel)
+{
+    return (2 * lin_vel + ang_vel * ROBOT_BASE) / (2 * WHEEL_RAD);
+}
+
+double MotorController::getLeftVel(const double lin_vel, const double ang_vel)
+{
+    return (2 * lin_vel - ang_vel * ROBOT_BASE) / (2 * WHEEL_RAD);
 }
 
 void MotorController::update()

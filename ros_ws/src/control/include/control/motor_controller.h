@@ -55,6 +55,22 @@ private:
      */
     void twistCallback(const geometry_msgs::Twist::ConstPtr& msg);
 
+    /**
+     * @brief Calculates the right wheel angular velocity based on a differential drive model
+     * @param lin_vel The robot's linear velocity
+     * @param ang_vel The robot's angular velocity
+     * @return The right wheel's angular velocity
+     */
+    double getRightVel(const double lin_vel, const double ang_vel);
+
+    /**
+     * @brief Calculates the left wheel angular velocity based on a differential drive model
+     * @param lin_vel The robot's linear velocity
+     * @param ang_vel The robot's angular velocity
+     * @return The left wheel's angular velocity
+     */
+    double getLeftVel(const double lin_vel, const double ang_vel);
+
 public:
     /**
      * @brief The MotorController default constructor
