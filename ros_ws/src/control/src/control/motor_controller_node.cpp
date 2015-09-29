@@ -5,6 +5,7 @@
 
 #include <ros/ros.h>
 #include "motor_controller.h"
+#include "constants.h"
 
 int main(int argc, char** argv)
 {
