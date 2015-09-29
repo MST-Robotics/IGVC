@@ -1,0 +1,34 @@
+/home/parallels/IGVC/ros_ws/src/arudino/motor/build/motor.cpp.o: \
+ /home/parallels/IGVC/ros_ws/src/arudino/motor/build/motor.cpp \
+ /home/parallels/Arduino/libraries/ros_lib/ros.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/node_handle.h \
+ /home/parallels/Arduino/libraries/ros_lib/std_msgs/Time.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/msg.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/time.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/duration.h \
+ /home/parallels/Arduino/libraries/ros_lib/rosserial_msgs/TopicInfo.h \
+ /home/parallels/Arduino/libraries/ros_lib/rosserial_msgs/Log.h \
+ /home/parallels/Arduino/libraries/ros_lib/rosserial_msgs/RequestParam.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/msg.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/publisher.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/node_handle.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/subscriber.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/service_server.h \
+ /home/parallels/Arduino/libraries/ros_lib/ros/service_client.h \
+ /home/parallels/Arduino/libraries/ros_lib/ArduinoHardware.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/Arduino.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/binary.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/WCharacter.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/WString.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/HardwareSerial.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/Stream.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/Print.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/Printable.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/USBAPI.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/Arduino.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/USBDesc.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/USBCore.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/variants/micro/pins_arduino.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/variants/micro/../leonardo/pins_arduino.h \
+ /opt/arduino-1.6.5-r5/hardware/arduino/avr/cores/arduino/HardwareSerial.h \
+ /home/parallels/Arduino/libraries/ros_lib/std_msgs/Float64.h
