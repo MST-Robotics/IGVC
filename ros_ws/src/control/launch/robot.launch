@@ -15,4 +15,8 @@
     <node pkg="control" type="teleop_mux_node" name="teleop_mux_node"/>
     <node pkg="control" type="motor_controller_node" name="motor_controller_node"/>
     
+    <!-- Arduino Stuff -->
+    <node ns="arduino_right" name="arduino_right" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0"/>
+    <node ns="arduino_left" name="arduino_left" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1"/>
+    
 </launch>
