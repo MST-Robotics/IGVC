@@ -7,6 +7,8 @@
  * 
  */
 
+#define USB_CON
+
 #include <ros.h>
 #include <std_msgs/Float64.h>
 
@@ -40,7 +42,7 @@ const int ENABLE_PIN = A3;
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define RIGHT_WHEEL
+#define LEFT_WHEEL
 
 #if defined RIGHT_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
@@ -161,7 +163,6 @@ float fscale( float originalMin, float originalMax, float newBegin,
 
     // condition curve parameter
     // limit range
-
     if (curve > 10) 
     {
         curve = 10;
@@ -171,8 +172,11 @@ float fscale( float originalMin, float originalMax, float newBegin,
         curve = -10;
     }
 
-    curve = (curve * -.1) ; // - invert and scale - this seems more intuitive - postive numbers give more weight to high end on output
-    curve = pow(10, curve); // convert linear scale into lograthimic exponent for other pow function
+    // - invert and scale - this seems more intuitive - 
+    //   postive numbers give more weight to high end on output
+    curve = (curve * -.1) ; 
+    // convert linear scale into lograthimic exponent for other pow function
+    curve = pow(10, curve);
 
     // Check for out of range inputValues
     if (inputValue < originalMin)
@@ -198,9 +202,12 @@ float fscale( float originalMin, float originalMax, float newBegin,
     }
 
     zeroRefCurVal = inputValue - originalMin;
-    normalizedCurVal  =  zeroRefCurVal / OriginalRange;   // normalize to 0 - 1 float
+    
+    // normalize to 0 - 1 float
+    normalizedCurVal  =  zeroRefCurVal / OriginalRange;
 
-    // Check for originalMin > originalMax  - the math for all other cases i.e. negative numbers seems to work out fine
+    // Check for originalMin > originalMax  - the math for all other cases 
+    //   i.e. negative numbers seems to work out fine
     if (originalMin > originalMax ) 
     {
         return 0;
