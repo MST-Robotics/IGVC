@@ -59,7 +59,7 @@ double MotorController::getLeftVel(const double lin_vel, const double ang_vel)
 
 double MotorController::scale(const double val, const double pre_min, const double pre_max, const double scale_min, const double scale_max)
 {
-	return (((scale_max - scale_min)*(val - pre_min))/(pre_max - pre_min)) + scale_max;
+	return (((scale_max - scale_min)*(val - pre_min))/(pre_max - pre_min)) + scale_min;
 }
 
 void MotorController::update()
