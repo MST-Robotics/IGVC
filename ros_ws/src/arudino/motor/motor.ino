@@ -24,7 +24,7 @@ const float PI_CONST = 3.14159265359;
 /**
  * @brief Radians Per Second at full Throtle
  */
-const float MAX_RAD_SEC = (8*PI_CONST);
+const float MAX_RAD_SEC = 5;
 
 /**
  * @brief Pins used to control the Motor
@@ -42,7 +42,7 @@ const int ENABLE_PIN = A3;
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define LEFT_WHEEL
+#define RIGHT_WHEEL
 
 #if defined RIGHT_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";

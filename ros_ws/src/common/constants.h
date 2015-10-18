@@ -78,15 +78,4 @@ const std::string MOTOR_CONTROLLER_NODE = "motor_controller_node";
  */
 const int LOOP_RATE = 30;
 
-//Robot Parameters
-/**
- * @brief The robots diameter from right wheel to left wheel
- */
-const double ROBOT_BASE = 0.7;
-/**
- * @brief The radius of the robot's wheels
- */
-const double WHEEL_RAD = 0.19;
-
-
 #endif /* COMMON_CONSTANTS_H_ */
