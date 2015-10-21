@@ -108,6 +108,9 @@ void velocityCallback(const std_msgs::Float64& msg)
 
 void setup() 
 {
+    //Fix the Motor Whine
+    setPwmFrequency(8);
+
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
     pinMode(REVERSE_PWM_PIN, OUTPUT);
@@ -223,4 +226,42 @@ float fscale( float originalMin, float originalMax, float newBegin,
     }
 
     return rangedValue;
+}
+
+
+/**
+ * @brief The Function will change frequency of Timer 0
+ * 
+ * This function accepts as input a divisor that will change
+ * the frequency of the Timer that controlls the PWM signal
+ *  
+ * @param divisor -what we divide the timer frequency by
+ */
+void setPwmFrequency(int divisor) 
+{
+    byte mode;
+    switch(divisor) 
+    {
+      case 1: 
+          mode = 0x01; 
+          break;
+      case 8: 
+          mode = 0x02; 
+          break;
+      case 64: 
+          mode = 0x03; 
+          break;
+      case 256: 
+          mode = 0x04;
+          break;
+      case 1024: 
+          mode = 0x05; 
+          break;
+      default: 
+          return;
+    }
+
+    //set mode of timer 0
+    TCCR0B = TCCR0B & 0b11111000 | mode;
+    
 }
