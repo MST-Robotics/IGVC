@@ -47,6 +47,11 @@ private:
     ros::NodeHandle nh;
 
     /**
+     * @brief The speed modifier. Represents a percentage of max speed
+     */
+    double speed_modifier;
+
+    /**
      * @brief The callback function for joy messages
      *
      * This function accepts joy messages and converts them into a twist format in the form of cmd_vel.  It will change
