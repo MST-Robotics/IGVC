@@ -49,7 +49,7 @@ private:
     /**
      * @brief The speed modifier. Represents a percentage of max speed
      */
-    double speedModifier;
+    double speed_modifier;
 
     /**
      * @brief The callback function for joy messages
