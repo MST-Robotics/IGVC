@@ -15,25 +15,25 @@
 class MotorController
 {
 private:
-	/**
-	 * @brief The diameter of the robot from one wheel to another
-	 */
-	double robot_base;
+    /**
+     * @brief The diameter of the robot from one wheel to another
+     */
+    double robot_base;
 
-	/**
-	 * @brief The radius of the wheels
-	 */
-	double wheel_rad;
+    /**
+     * @brief The radius of the wheels
+     */
+    double wheel_rad;
 
-	/**
-	 * @brief The maximum speed of the robot
-	 */
-	double max_speed;
+    /**
+     * @brief The maximum speed of the robot
+     */
+    double max_speed;
 
-	/**
-	 * @brief The unscaled maximum speed of the wheel velocity function
-	 */
-	double unscaled_max_speed;
+    /**
+     * @brief The unscaled maximum speed of the wheel velocity function
+     */
+    double unscaled_max_speed;
 
     /**
      * @brief The right velocity to be published
@@ -93,7 +93,7 @@ private:
 
     /**
      * @brief Scales a given double range to a new given double range
-	 * @param val The value to scale
+     * @param val The value to scale
      * @param pre_min The minimum value before scaling
      * @param pre_max The maximum value before scaling
      * @param scale_min The minimum value after scaling
@@ -101,7 +101,7 @@ private:
      * @return The scaled value
      */
     double scale(const double val, const double pre_min, const double pre_max, const double scale_min,
-    			 const double scale_max);
+                 const double scale_max);
 
 public:
     /**
