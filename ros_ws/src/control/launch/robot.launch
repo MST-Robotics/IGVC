@@ -1,9 +1,13 @@
 <launch>
     <!-- Define arguments and defaults -->
     <arg name="robot_addr" default="localhost"/>
+    <arg name="robot_launch" default="igvc.launch"/>
+    
+    <include file="$(find control)/launch/$(arg robot_launch)" />
 
     <!-- Connect to the specified master -->
     <env name="ROS_MASTER_URI" value="http://$(arg robot_addr):11311"/>
+    
     
     <!-- Launch joy_node -->
     <node pkg="joy" type="joy_node" name="joy_node" respawn="true">
