@@ -1,0 +1,8 @@
+<launch>
+    <!-- Load robot urdf to parameter server -->
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find robot_description)/robots/igvc.urdf.xacro" />
+    
+    <!-- Launch nodes to create a tf tree from the urdf model -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" />
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_st_pub" />
+</launch>
