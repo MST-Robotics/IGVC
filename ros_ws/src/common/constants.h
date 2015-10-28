@@ -31,6 +31,14 @@ const int X_BUTTON = 2;
  * @brief The index of the Y button on the controller
  */
 const int Y_BUTTON = 3;
+/**
+ * @brief The index of the LB button on the controller
+ */
+const int LB_BUTTON = 4;
+/**
+ * @brief The index of the RB button on the controller
+ */
+const int RB_BUTTON = 5;
 
 //Topic name constants
 /**

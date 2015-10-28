@@ -1,0 +1,10 @@
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+    
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find robot_description)/robots/igvc.urdf.xacro" />
+    
+    <node name="tf_footprint_base" pkg="tf" type="static_transform_publisher" 
+          args="0 0 0 0 0 0 base_link base_footprint 40" />
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+          args="-param robot_description -urdf -model igvc" output="screen" />
+</launch>
