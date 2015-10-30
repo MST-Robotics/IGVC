@@ -1,6 +1,7 @@
 <launch>
-    <node pkg="nmea_navsat_driver" type="nmea_serial_driver name="navsat" respawn="true">
+    <node name="gps" pkg="nmea_navsat_driver" type="nmea_serial_driver" >
     <param name="port" value="/dev/ttyUSB0"/>
-    <param name "baud" value="19200"/>
+    <param name= "baud" value="19200"/>
     </node>
 </launch>
+
