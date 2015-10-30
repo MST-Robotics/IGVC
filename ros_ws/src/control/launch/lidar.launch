@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="urg_node" type="urg_node" name="lidar">
+        <param name="serial_port" type="string" value="/dev/ttyACM0"/>
+        <param name="frame_id" type="string" value="laser_link"/>
+        <param name="calibrate_time" type="bool" value="true"/>
+    </node>
+</launch>
