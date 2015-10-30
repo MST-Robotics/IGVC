@@ -49,5 +49,20 @@
 	            </plugin>
             </sensor>
         </gazebo>
+        
+        <gazebo>
+            <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
+                <updateRate>40</updateRate>
+                <bodyName>base_link</bodyName>
+                <frameId>base_link</frameId>
+                <topicName>fix</topicName>
+                <velocityTopicName>navsat/vel</velocityTopicName>
+                <referenceLatitude>37.955958</referenceLatitude>
+                <referenceLongitude>-91.775204</referenceLongitude>
+                <referenceHeading>0</referenceHeading>
+                <referenceAltitude>0</referenceAltitude>
+                <drift>0.0001 0.0001 0.0001</drift>
+            </plugin>
+        </gazebo>
     </xacro:macro>
 </robot>
