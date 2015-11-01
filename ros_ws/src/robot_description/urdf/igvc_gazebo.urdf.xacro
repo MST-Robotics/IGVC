@@ -83,7 +83,7 @@
                         <far>300</far>
                     </clip>
                     <noise>
-                        <type>guassian</type>
+                        <type>gaussian</type>
                         <mean>0.0</mean>
                         <stddev>0.007</stddev>
                     </noise>
