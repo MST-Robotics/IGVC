@@ -2,19 +2,108 @@
 
 <robot name="igvc_sim" xmlns:xacro="http://ros.org/wiki/xacro" >
     <xacro:macro name="igvc_sim">
+        <!-- Drive plugin -->
         <gazebo>
             <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
                 <alwaysOn>true</alwaysOn>
                 <leftJoint>right_wheel_joint</leftJoint>
                 <rightJoint>left_wheel_joint</rightJoint>
-                <wheelSeperation>0.5207</wheelSeperation>
+                <wheelSeparation>0.5207</wheelSeparation>
                 <wheelDiameter>0.4064</wheelDiameter>
-                <torque>75.3</torque>
+                <wheelTorque>75.3</wheelTorque>
                 <commandTopic>cmd_vel</commandTopic>
                 <odometryTopic>odom</odometryTopic>
                 <odometryFrame>odom</odometryFrame>
                 <robotBaseFrame>base_link</robotBaseFrame>
             </plugin>
+        </gazebo>
+        
+        <!-- LiDAR -->
+        <gazebo reference="laser_link">
+            <sensor type="ray" name="hokuyo_sensor">
+                <pose>0 0 0 0 0 0</pose>
+                <visualize>true</visualize>
+                <update_rate>40</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>1080</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-2.35619449</min_angle>
+                            <max_angle>2.35619449</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>0.10</min>
+                        <max>30.0</max>
+                        <resolution>0.03</resolution>
+                    </range>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.01</stddev>
+                    </noise>
+                </ray>
+	            <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+	                <topicName>/scan</topicName>
+	                <frameName>laser_link</frameName>
+	            </plugin>
+            </sensor>
+        </gazebo>
+        
+        <!-- GPS -->
+        <gazebo>
+            <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
+                <updateRate>40</updateRate>
+                <bodyName>base_link</bodyName>
+                <frameId>base_link</frameId>
+                <topicName>fix</topicName>
+                <velocityTopicName>navsat/vel</velocityTopicName>
+                <referenceLatitude>37.955958</referenceLatitude>
+                <referenceLongitude>-91.775204</referenceLongitude>
+                <referenceHeading>0</referenceHeading>
+                <referenceAltitude>0</referenceAltitude>
+                <drift>0.0001 0.0001 0.0001</drift>
+            </plugin>
+        </gazebo>
+        
+        <!-- Camera -->
+        <gazebo reference="camera_link">
+            <sensor type="camera" name="camera">
+                <update_rate>30.0</update_rate>
+                <camera name="camera">
+                    <horizontal_fov>1.3962634</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.02</near>
+                        <far>300</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                </camera>
+                
+                <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                    <alwaysOn>true</alwaysOn>
+                    <updateRate>0.0</updateRate>
+                    <cameraName>camera</cameraName>
+                    <imageTopicName>image_raw</imageTopicName>
+                    <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                    <frameName>camera_link</frameName>
+                    <hackBaseline>0.07</hackBaseline>
+                    <distortionK1>0.0</distortionK1>
+                    <distortionK2>0.0</distortionK2>
+                    <distortionK3>0.0</distortionK3>
+                    <distortionT1>0.0</distortionT1>
+                    <distortionT2>0.0</distortionT2>
+                </plugin>
+            </sensor>
         </gazebo>
     </xacro:macro>
 </robot>
