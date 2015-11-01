@@ -169,6 +169,29 @@
             <child link="laser_link" />
             <axis xyz="0 0 0" />
         </joint>
+        <link name="camera_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size=".03 .05 .05"/>
+                </geometry>
+                <material name="">
+                    <color rgba="0 0 0 .7" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size=".03 .05 .05"/>
+                </geometry>
+            </collision>
+        </link>
+        <joint name="camera_joint" type="fixed">
+            <origin xyz="-0.20 0.34722 .6" rpy="0 0.5235 0"/>
+            <parent link="base_link"/>
+            <child link="camera_link"/>
+            <axis xyz="0 0 0" />
+        </joint>
         
         <igvc_sim/>
     </xacro:macro>
