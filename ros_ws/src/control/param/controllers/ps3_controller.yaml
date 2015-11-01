@@ -1,0 +1,8 @@
+LINEAR_VEL:        1
+ANGULAR_VEL:       2
+TELEOP:            0
+STANDBY:           1
+
+AUTO:              3
+SPEED_INC:         4
+SPEED_DEC:         5

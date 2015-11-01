@@ -16,6 +16,7 @@
     
     <!-- Load parameter file -->
     <rosparam command="load" file="$(find control)/param/igvc.yaml"/>
+    <rosparam command="load" file="$(find control)/param/controllers/moga.yaml"/>
     
     <!-- Launch teleop configuration -->
     <node pkg="control" type="remote_control_node" name="remote_control_node"/>

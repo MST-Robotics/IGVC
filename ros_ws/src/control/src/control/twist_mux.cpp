@@ -25,19 +25,20 @@ void TwistMux::update()
 
 void TwistMux::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
-    if(msg->buttons[B_BUTTON] == 1)
+    ConfigValues config = initConfigs();
+    if(msg->buttons[config.standby_btn] == 1)
     {
         current_mode = Control::standby;
         stopRobot();
         twist_sub = nh.subscribe<geometry_msgs::Twist>(AUTO_TOPIC, 1, &TwistMux::twistCallback, this);
     }
-    else if(msg->buttons[A_BUTTON] == 1)
+    else if(msg->buttons[config.teleop_btn] == 1)
     {
         current_mode = Control::teleop;
         stopRobot();
         twist_sub = nh.subscribe<geometry_msgs::Twist>(TELEOP_TOPIC, 1, &TwistMux::twistCallback, this);
     }
-    else if(msg->buttons[Y_BUTTON] == 1)
+    else if(msg->buttons[config.autonomous_btn] == 1)
     {
         current_mode = Control::autonomous;
         stopRobot();

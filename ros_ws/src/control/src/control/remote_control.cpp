@@ -39,17 +39,17 @@ RemoteControl::RemoteControl(std::string twist_topic, std::string joy_topic)
 
 void RemoteControl::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
-
-    if ((msg->buttons[RB_BUTTON] == 1) && (speed_modifier < 1))
+    ConfigValues config = initConfigs();
+    if ((msg->buttons[config.speed_inc_btn] == 1) && (speed_modifier < 1))
     {
         speed_modifier += 0.01;
     }
-    else if ((msg->buttons[LB_BUTTON] == 1) && (speed_modifier > 0))
+    else if ((msg->buttons[config.speed_dec_btn] == 1) && (speed_modifier > 0))
     {
         speed_modifier -= 0.01;
     }
-    cmd_vel.linear.x = msg->axes[Y_AXIS_L_STICK] * speed_modifier;
-    cmd_vel.angular.z = msg->axes[X_AXIS_R_STICK];
+    cmd_vel.linear.x = msg->axes[config.lin_vel_btn] * speed_modifier;
+    cmd_vel.angular.z = msg->axes[config.ang_vel_btn];
 }
 
 void RemoteControl::update()
