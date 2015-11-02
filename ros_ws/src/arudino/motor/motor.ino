@@ -74,7 +74,7 @@ const int ENABLE_PIN = A3;
 /**
  * @brief Float used to scale the Speed to
  */
-float desiered_speed = 0;
+float desired_speed = 0;
 
 /**
  * @brief Values to be updated when the inturrupt is triggered for encoder
@@ -125,12 +125,12 @@ ros::Subscriber<std_msgs::Float64> velocitySub(VELOCITY_TOPIC, &velocityCallback
  */
 void velocityCallback(const std_msgs::Float64& msg)
 {
-    desiered_speed = fscale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
+    desired_speed = fscale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
     if(msg.data > 0)
     {
         //Go Forward
         digitalWrite(ENABLE_PIN, HIGH);
-        analogWrite(FORWARD_PWM_PIN, desiered_speed);
+        analogWrite(FORWARD_PWM_PIN, desired_speed);
         analogWrite(REVERSE_PWM_PIN, 0);
     }
     else if(msg.data < 0)
@@ -138,7 +138,7 @@ void velocityCallback(const std_msgs::Float64& msg)
         //Go in Reverse
         digitalWrite(ENABLE_PIN, HIGH);
         analogWrite(FORWARD_PWM_PIN, 0);
-        analogWrite(REVERSE_PWM_PIN, desiered_speed);
+        analogWrite(REVERSE_PWM_PIN, desired_speed);
     }
     else
     {
