@@ -17,24 +17,6 @@
  *************/
  
 /**
- * @brief Define Pi for use in conversion
- */
-const float PI_CONST = 3.14159265359;
- 
-/**
- * @brief Radians Per Second at full Throtle
- */
-const float MAX_RAD_SEC = 5;
-
-/**
- * @brief Pins used to control the Motor
- */
-const int FORWARD_PWM_PIN = 5;
-const int REVERSE_PWM_PIN = 6;
-const int ENABLE_PIN = A3;
-
-
-/**
  * @brief Place to Change which Wheel we want to Program
  * 
  * In order to correctly inturpret the Wheel Velocity's, 
@@ -42,7 +24,7 @@ const int ENABLE_PIN = A3;
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define RIGHT_WHEEL
+#define LEFT_WHEEL
 
 #if defined RIGHT_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
@@ -51,13 +33,74 @@ const char* VELOCITY_TOPIC = "left_vel";
 #endif
 
 /**
+ * @brief Define Pi for use in conversion
+ */
+const float PI_CONST = 3.14159265359;
+
+/**
+ * @brief value for the desierd refresh rate of the encoder
+ * 
+ * Set to 30Hz
+ */
+ const float refresh_rate = 33.3;
+
+/**
+ * @brief Define constants for the Encoder Calculation
+ */
+const float WHEEL_RADIUS = 8.5; //Wheel Radius in inches
+const float WHEEL_CIRCUMFRANCE = (WHEEL_RADIUS*PI_CONST*2);
+const int GEAR_RATIO = 2;
+const int TICKS_PER_ROTATION = 200/GEAR_RATIO;
+ 
+/**
+ * @brief Radians Per Second at full Throtle
+ */
+const float MAX_RAD_SEC = 5;
+
+/**
+ * @brief Pin the encoder is attached
+ */
+const int ENCODER_PIN = 2;
+
+
+
+/**
+ * @brief Pins used to control the Motor
+ */
+const int FORWARD_PWM_PIN = 5;
+const int REVERSE_PWM_PIN = 6;
+const int ENABLE_PIN = A3;
+
+/**
  * @brief Float used to scale the Speed to
  */
-float speed = 0;
+float desiered_speed = 0;
+
+/**
+ * @brief Values to be updated when the inturrupt is triggered for encoder
+ */
+volatile unsigned int encoder_ticks = 0;
+volatile int encoder_pos_last = LOW;
+volatile int encoder_pos_current = LOW;
+
+/**
+ * @brief Values used to keep track of current time for multitasking
+ */
+ int current_mills = 0;
+ int old_mills = 0;
+
+ /**
+  * @brief Values used to calculate speed from the encoder
+  */
+  int ticks_per_cycle = 0;
+  int ticks_per_cycle_old = 0;
+  float current_speed = 0;
 
 /************************
  * Forward Declerations *
  ************************/
+void encoder_count();
+void calculate_speed();
 void velocityCallback(const std_msgs::Float64& msg);
 float fscale( float originalMin, float originalMax, float newBegin, 
               float newEnd, float inputValue, float curve);
@@ -65,7 +108,7 @@ float fscale( float originalMin, float originalMax, float newBegin,
 /**
  * @brief ROS node handle
  */
-ros::NodeHandle nodeHandle;
+ros::NodeHandle node_handle;
 
 /**
  * @brief ROS Subscriber for the Velocity Message
@@ -82,12 +125,12 @@ ros::Subscriber<std_msgs::Float64> velocitySub(VELOCITY_TOPIC, &velocityCallback
  */
 void velocityCallback(const std_msgs::Float64& msg)
 {
-    speed = fscale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
+    desiered_speed = fscale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
     if(msg.data > 0)
     {
         //Go Forward
         digitalWrite(ENABLE_PIN, HIGH);
-        analogWrite(FORWARD_PWM_PIN, speed);
+        analogWrite(FORWARD_PWM_PIN, desiered_speed);
         analogWrite(REVERSE_PWM_PIN, 0);
     }
     else if(msg.data < 0)
@@ -95,7 +138,7 @@ void velocityCallback(const std_msgs::Float64& msg)
         //Go in Reverse
         digitalWrite(ENABLE_PIN, HIGH);
         analogWrite(FORWARD_PWM_PIN, 0);
-        analogWrite(REVERSE_PWM_PIN, speed);
+        analogWrite(REVERSE_PWM_PIN, desiered_speed);
     }
     else
     {
@@ -112,6 +155,7 @@ void setup()
     pinMode(FORWARD_PWM_PIN, OUTPUT);
     pinMode(REVERSE_PWM_PIN, OUTPUT);
     pinMode(ENABLE_PIN, OUTPUT);
+    pinMode(ENCODER_PIN, INPUT);
 
     //Set Robot to break when starting
     digitalWrite(ENABLE_PIN, HIGH);
@@ -119,18 +163,68 @@ void setup()
     analogWrite(REVERSE_PWM_PIN, 0);
 
     //Setup ROS node and topics
-    nodeHandle.initNode();
-    nodeHandle.subscribe(velocitySub);
+    node_handle.initNode();
+    node_handle.subscribe(velocitySub);
+
+    //Set the Inturupt on Pin 2
+    attachInterrupt(0, encoder_count, CHANGE);
 }
 
 void loop() 
 {
-    nodeHandle.spinOnce();
+    node_handle.spinOnce();
+
+    //update the current time for multitasking
+    current_mills = millis();
+    
+    //Get the speed of wheel at a rate of 30Htz
+    if(current_mills-old_mills >= refresh_rate)
+    {
+        calculate_speed();
+    }
 }
 
+/**
+ * @brief The Function will update the encoder
+ * 
+ * This Function is called whenever there is a change 
+ * to the value of pin 2, it is part of the attachInterrupt routine
+ * It updates the value of 
+ */
+void encoder_count()
+{
+    encoder_pos_current = digitalRead(ENCODER_PIN); 
+    
+    if ((encoder_pos_last == LOW) && 
+        (encoder_pos_current == HIGH)) 
+    { 
+        encoder_ticks++; 
+    }
+    
+    encoder_pos_last = encoder_pos_current;
+}
 
+/**
+ * @brief The Function will calculate the current speed
+ * 
+ * This function is called once durring each refresh rate
+ * It calculates the current speed based on the encoder readings
+ */
+void calculate_speed()
+{
+    ticks_per_cycle = encoder_ticks;
 
+    //calculates speed in (inces per .03 seconds)
+    //*************************************************
+    //TEMPORARY --WILL UPDATE WITH PROPER UNITS LATER--
+    //*************************************************
+    current_speed = ((ticks_per_cycle-ticks_per_cycle_old) /
+                     (TICKS_PER_ROTATION*WHEEL_CIRCUMFRANCE));
 
+    //Update the following values so that the next cycle works correctlly                 
+    ticks_per_cycle_old = ticks_per_cycle;
+    old_mills = current_mills;
+}
 
 /**
  * @brief The Function will Scale the Input to the Expected Output
@@ -149,16 +243,16 @@ void loop()
  *        curve - excepts a value -10 through 10, 0 being linear
  *                scaling the values with a curve
  */
-float fscale( float originalMin, float originalMax, float newBegin, 
-              float newEnd, float inputValue, float curve)
+float fscale( float original_min, float original_max, float new_begin, 
+              float new_end, float input_value, float curve)
 {
 
-    float OriginalRange = 0;
-    float NewRange = 0;
-    float zeroRefCurVal = 0;
-    float normalizedCurVal = 0;
-    float rangedValue = 0;
-    boolean invFlag = 0;
+    float original_range = 0;
+    float new_range = 0;
+    float zero_ref_cur_val = 0;
+    float normalized_cur_val = 0;
+    float ranged_value = 0;
+    boolean inv_flag = 0;
 
 
     // condition curve parameter
@@ -179,48 +273,48 @@ float fscale( float originalMin, float originalMax, float newBegin,
     curve = pow(10, curve);
 
     // Check for out of range inputValues
-    if (inputValue < originalMin)
+    if (input_value < original_min)
     {
-        inputValue = originalMin;
+        input_value = original_min;
     }
-    if (inputValue > originalMax) 
+    if (input_value > original_max) 
     {
-        inputValue = originalMax;
+        input_value = original_max;
     }
 
     // Zero Refference the values
-    OriginalRange = originalMax - originalMin;
+    original_range = original_max - original_min;
 
-    if (newEnd > newBegin)
+    if (new_end > new_begin)
     {
-        NewRange = newEnd - newBegin;
+        new_range = new_end - new_begin;
     }
     else
     {
-        NewRange = newBegin - newEnd;
-        invFlag = 1;
+        new_range = new_begin - new_end;
+        inv_flag = 1;
     }
 
-    zeroRefCurVal = inputValue - originalMin;
+    zero_ref_cur_val = input_value - original_min;
     
     // normalize to 0 - 1 float
-    normalizedCurVal  =  zeroRefCurVal / OriginalRange;
+    normalized_cur_val  =  zero_ref_cur_val / original_range;
 
     // Check for originalMin > originalMax  - the math for all other cases 
     //   i.e. negative numbers seems to work out fine
-    if (originalMin > originalMax ) 
+    if (original_min > original_max ) 
     {
         return 0;
     }
 
-    if (invFlag == 0)
+    if (inv_flag == 0)
     {
-        rangedValue =  (pow(normalizedCurVal, curve) * NewRange) + newBegin;
+        ranged_value =  (pow(normalized_cur_val, curve) * new_range) + new_begin;
     }
     else     // invert the ranges
     {  
-      rangedValue =  newBegin - (pow(normalizedCurVal, curve) * NewRange);
+      ranged_value =  new_begin - (pow(normalized_cur_val, curve) * new_range);
     }
 
-    return rangedValue;
+    return ranged_value;
 }
