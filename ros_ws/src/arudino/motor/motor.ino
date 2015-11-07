@@ -33,6 +33,12 @@ const int FORWARD_PWM_PIN = 5;
 const int REVERSE_PWM_PIN = 6;
 const int ENABLE_PIN = A3;
 
+/**
+ * @brief Const used to change the Motor Whine Divisor
+ * 
+ * This is set to 8 for IGVC Robot
+ */
+const int FREQUENCY_DIVISOR = 8;
 
 /**
  * @brief Place to Change which Wheel we want to Program
@@ -110,7 +116,7 @@ void setup()
 {
     //Fix the Motor Whine
     //After testing on IGVC 8 gave the best results
-    set_pwm_frequency(8);
+    set_pwm_frequency(FREQUENCY_DIVISOR);
 
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
@@ -264,5 +270,6 @@ void set_pwm_frequency(int divisor)
 
     //set mode of timer 0
     TCCR0B = TCCR0B & 0b11111000 | mode;
-    
+
+    return;
 }
