@@ -109,6 +109,7 @@ void velocityCallback(const std_msgs::Float64& msg)
 void setup() 
 {
     //Fix the Motor Whine
+    //After testing on IGVC 8 gave the best results
     setPwmFrequency(8);
 
     //setup pins
