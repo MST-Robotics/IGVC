@@ -33,6 +33,12 @@ const int FORWARD_PWM_PIN = 5;
 const int REVERSE_PWM_PIN = 6;
 const int ENABLE_PIN = A3;
 
+/**
+ * @brief Const used to change the Motor Whine Divisor
+ * 
+ * This is set to 8 for IGVC Robot
+ */
+const int FREQUENCY_DIVISOR = 8;
 
 /**
  * @brief Place to Change which Wheel we want to Program
@@ -108,6 +114,10 @@ void velocityCallback(const std_msgs::Float64& msg)
 
 void setup() 
 {
+    //Fix the Motor Whine
+    //After testing on IGVC 8 gave the best results
+    set_pwm_frequency(FREQUENCY_DIVISOR);
+
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
     pinMode(REVERSE_PWM_PIN, OUTPUT);
@@ -223,4 +233,43 @@ float fscale( float originalMin, float originalMax, float newBegin,
     }
 
     return rangedValue;
+}
+
+
+/**
+ * @brief The Function will change frequency of Timer 0
+ * 
+ * This function accepts as input a divisor that will change
+ * the frequency of the Timer that controlls the PWM signal
+ *  
+ * @param divisor -what we divide the timer frequency by
+ */
+void set_pwm_frequency(int divisor) 
+{
+    byte mode;
+    switch(divisor) 
+    {
+      case 1: 
+          mode = 0x01; 
+          break;
+      case 8: 
+          mode = 0x02; 
+          break;
+      case 64: 
+          mode = 0x03; 
+          break;
+      case 256: 
+          mode = 0x04;
+          break;
+      case 1024: 
+          mode = 0x05; 
+          break;
+      default: 
+          return;
+    }
+
+    //set mode of timer 0
+    TCCR0B = TCCR0B & 0b11111000 | mode;
+
+    return;
 }
