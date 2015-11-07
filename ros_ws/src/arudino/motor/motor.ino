@@ -110,7 +110,7 @@ void setup()
 {
     //Fix the Motor Whine
     //After testing on IGVC 8 gave the best results
-    setPwmFrequency(8);
+    set_pwm_frequency(8);
 
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
@@ -238,7 +238,7 @@ float fscale( float originalMin, float originalMax, float newBegin,
  *  
  * @param divisor -what we divide the timer frequency by
  */
-void setPwmFrequency(int divisor) 
+void set_pwm_frequency(int divisor) 
 {
     byte mode;
     switch(divisor) 
