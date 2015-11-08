@@ -90,7 +90,9 @@ private:
      * @param msg The message which is received from the twist publisher
      */
     void twistCallback(const geometry_msgs::Twist::ConstPtr& msg);
-
+    
+    //TODO comment
+    ConfigValues config;
     /**
      * @brief Sets all the fields in cmd_vel to 0 to ensure the robot is not moving
      */

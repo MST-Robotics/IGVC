@@ -17,7 +17,7 @@ RemoteControl::RemoteControl()
     cmd_vel.angular.y = 0;
     cmd_vel.angular.z = 0;
     speed_modifier = 0.5;
-
+    config = initConfigs();
     joy_sub = nh.subscribe<sensor_msgs::Joy>(JOY_TOPIC, 1, &RemoteControl::joyCallback, this);
     twist_pub = nh.advertise<geometry_msgs::Twist>(TELEOP_TOPIC, 1);
 }
@@ -39,7 +39,7 @@ RemoteControl::RemoteControl(std::string twist_topic, std::string joy_topic)
 
 void RemoteControl::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
-    ConfigValues config = initConfigs();
+
     if ((msg->buttons[config.speed_inc_btn] == 1) && (speed_modifier < 1))
     {
         speed_modifier += 0.01;

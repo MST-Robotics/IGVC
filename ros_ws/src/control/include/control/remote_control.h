@@ -51,6 +51,9 @@ private:
      */
     double speed_modifier;
 
+//TODO COMMENT
+    ConfigValues config;
+
     /**
      * @brief The callback function for joy messages
      *

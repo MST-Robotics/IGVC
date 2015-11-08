@@ -8,6 +8,7 @@ void get_int_param(std::string key_name, int& config_var)
     {
     	ROS_ERROR("%s is not defined on the parameter server", key_name.c_str());
     }
+    config_var = static_cast<int>(casted);
     return;
 }
 
