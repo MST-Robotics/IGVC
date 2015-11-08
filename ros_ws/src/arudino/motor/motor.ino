@@ -11,6 +11,7 @@
 
 #include <ros.h>
 #include <std_msgs/Float64.h>
+#include <control/Encoder.h>
 
 /*************
  * Constants *
@@ -28,8 +29,10 @@
 
 #if defined RIGHT_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
+const char* ENCODER_TOPIC = "right_tick";
 #elif defined LEFT_WHEEL
 const char* VELOCITY_TOPIC = "left_vel";
+const char* ENCODER_TOPIC = "left_tick";
 #endif
 
 /**
@@ -42,7 +45,7 @@ const float PI_CONST = 3.14159265359;
  * 
  * Set to 30Hz
  */
- const float refresh_rate = 33.3;
+ const float REFRESH_RATE = 33.3;
 
 /**
  * @brief Define constants for the Encoder Calculation
@@ -99,10 +102,11 @@ volatile int encoder_pos_current = LOW;
 /************************
  * Forward Declerations *
  ************************/
-void encoder_count();
-void calculate_speed();
+void encoderCount();
+void calculateSpeed();
+void updateEncoder();
 void velocityCallback(const std_msgs::Float64& msg);
-float fscale( float originalMin, float originalMax, float newBegin, 
+float fScale( float originalMin, float originalMax, float newBegin, 
               float newEnd, float inputValue, float curve);
 
 /**
@@ -111,9 +115,56 @@ float fscale( float originalMin, float originalMax, float newBegin,
 ros::NodeHandle node_handle;
 
 /**
+ * @brief ROS message used for publishing the encoder data
+ */
+ std_msgs::UInt8 encoderMessage;
+
+/**
  * @brief ROS Subscriber for the Velocity Message
  */
 ros::Subscriber<std_msgs::Float64> velocitySub(VELOCITY_TOPIC, &velocityCallback);
+
+/**
+ * @brief ROS Publisher for the Encoder Message
+ */
+ros::Publisher encoderPub(ENCODER_TOPIC, &encoderMessage);
+
+void setup() 
+{
+    //setup pins
+    pinMode(FORWARD_PWM_PIN, OUTPUT);
+    pinMode(REVERSE_PWM_PIN, OUTPUT);
+    pinMode(ENABLE_PIN, OUTPUT);
+    pinMode(ENCODER_PIN, INPUT);
+
+    //Set Robot to break when starting
+    digitalWrite(ENABLE_PIN, HIGH);
+    analogWrite(FORWARD_PWM_PIN, 0);
+    analogWrite(REVERSE_PWM_PIN, 0);
+
+    //Setup ROS node and topics
+    node_handle.initNode();
+    node_handle.subscribe(velocitySub);
+    node_handle.advertise(encoderPub);
+
+    //Set the Inturupt on Pin 2
+    attachInterrupt(0, encoderCount, CHANGE);
+}
+
+void loop() 
+{
+    node_handle.spinOnce();
+    updateEncoder();
+
+    //update the current time for multitasking
+    current_mills = millis();
+    
+    //Get the speed of wheel at a rate of 30Htz
+    if(current_mills-old_mills >= REFRESH_RATE)
+    {
+        calculateSpeed();
+    }
+}
 
 /**
  * @brief The callback function for velocity messages
@@ -125,7 +176,7 @@ ros::Subscriber<std_msgs::Float64> velocitySub(VELOCITY_TOPIC, &velocityCallback
  */
 void velocityCallback(const std_msgs::Float64& msg)
 {
-    desired_speed = fscale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
+    desired_speed = fScale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
     if(msg.data > 0)
     {
         //Go Forward
@@ -149,39 +200,13 @@ void velocityCallback(const std_msgs::Float64& msg)
     }
 }
 
-void setup() 
+void updateEncoder()
 {
-    //setup pins
-    pinMode(FORWARD_PWM_PIN, OUTPUT);
-    pinMode(REVERSE_PWM_PIN, OUTPUT);
-    pinMode(ENABLE_PIN, OUTPUT);
-    pinMode(ENCODER_PIN, INPUT);
-
-    //Set Robot to break when starting
-    digitalWrite(ENABLE_PIN, HIGH);
-    analogWrite(FORWARD_PWM_PIN, 0);
-    analogWrite(REVERSE_PWM_PIN, 0);
-
-    //Setup ROS node and topics
-    node_handle.initNode();
-    node_handle.subscribe(velocitySub);
-
-    //Set the Inturupt on Pin 2
-    attachInterrupt(0, encoder_count, CHANGE);
-}
-
-void loop() 
-{
-    node_handle.spinOnce();
-
-    //update the current time for multitasking
-    current_mills = millis();
+    //update the value of the message
+    encoderMessage.data = encoder_ticks;
     
-    //Get the speed of wheel at a rate of 30Htz
-    if(current_mills-old_mills >= refresh_rate)
-    {
-        calculate_speed();
-    }
+    //publish message
+    encoderPub.publish(&encoderMessage);
 }
 
 /**
@@ -191,7 +216,7 @@ void loop()
  * to the value of pin 2, it is part of the attachInterrupt routine
  * It updates the value of 
  */
-void encoder_count()
+void encoderCount()
 {
     encoder_pos_current = digitalRead(ENCODER_PIN); 
     
@@ -210,7 +235,7 @@ void encoder_count()
  * This function is called once durring each refresh rate
  * It calculates the current speed based on the encoder readings
  */
-void calculate_speed()
+void calculateSpeed()
 {
     ticks_per_cycle = encoder_ticks;
 
@@ -243,7 +268,7 @@ void calculate_speed()
  *        curve - excepts a value -10 through 10, 0 being linear
  *                scaling the values with a curve
  */
-float fscale( float original_min, float original_max, float new_begin, 
+float fScale( float original_min, float original_max, float new_begin, 
               float new_end, float input_value, float curve)
 {
 

@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
     sensor_msgs
+    message_generation
 )
 
 ###################################
@@ -16,7 +17,16 @@ catkin_package(
     LIBRARIES control
     CATKIN_DEPENDS geometry_msgs roscpp std_msgs sensor_msgs
     DEPENDS system_lib
+    CATKIN_DEPENDS message_runtime
 )
+
+################################################
+## Declare ROS messages, services and actions ##
+################################################
+## Generate message in the 'msg' folder
+add_message_files(FILES Encoder.msg)
+
+
 
 ###########
 ## Build ##
