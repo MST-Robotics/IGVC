@@ -21,18 +21,21 @@ double max_ang_vel;
 
 //Controller Info
 std::string controller_type;
-double lin_vel_btn;
-double ang_vel_btn;
-double teleop_btn;
-double standby_btn;
-double autonomous_btn;
-double speed_inc_btn;
-double speed_dec_btn;
-double turbo_btn;
+int lin_vel_btn;
+int ang_vel_btn;
+int teleop_btn;
+int standby_btn;
+int autonomous_btn;
+int speed_inc_btn;
+int speed_dec_btn;
+int turbo_btn;
 
 
 };
 ConfigValues initConfigs();
+void get_int_param(std::string key_name, int & config_var); /**
+								
+*/
 
  
 #endif /* CONFIG_H_ */

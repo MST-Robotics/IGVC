@@ -1,6 +1,15 @@
 #include "config.h"
 
-
+void get_int_param(std::string key_name, int& config_var)
+{
+    ros::NodeHandle nh; 
+    double casted = static_cast<double>(config_var);
+    if(!nh.getParam(key_name, casted))
+    {
+    	ROS_ERROR("%s is not defined on the parameter server", key_name.c_str());
+    }
+    return;
+}
 
 
 ConfigValues initConfigs()
@@ -27,40 +36,14 @@ ConfigValues initConfigs()
     {
     	ROS_ERROR("max_ang_vel is not defined on the parameter server");
     }
-    
-    if(!nh.getParam("/controller_type", config.controller_type))
-    {
-    	ROS_ERROR("controller_type is not defined on parameter server");
-    } 
-    if(!nh.getParam("/lin_vel_btn", config.lin_vel_btn))
-    {
-    	ROS_ERROR("lin_vel_btn is not defined on the parameter server");
-    }
-    if(!nh.getParam("/ang_vel_btn", config.ang_vel_btn))
-    {
-    	ROS_ERROR("ang_vel_btn is not defined on the parameter server");
-    }
-    if(!nh.getParam("/teleop_btn", config.teleop_btn))
-    {
-    	ROS_ERROR("teleop_btn is not defined on the parameter server");
-    }
-    if(!nh.getParam("/standby_btn", config.standby_btn))
-    {
-    	ROS_ERROR("standby_btn is not defined on the parameter server");
-    }
-    if(!nh.getParam("/autonomous_btn", config.autonomous_btn))
-    {
-    	ROS_ERROR("autonomous_btn is not defined on the parameter server");
-    }
-    if(!nh.getParam("/speed_inc_btn", config.speed_inc_btn))
-    {
-    	ROS_ERROR("speed_inc_btn is not defined on the parameter server");
-    }
-    if(!nh.getParam("/speed_dec_btn", config.speed_dec_btn))
-    {
-    	ROS_ERROR("speed_dec_btn is not defined on the parameter server");
-    }
+    //controller mapping
+    get_int_param("/lin_vel_btn", config.lin_vel_btn);
+    get_int_param("/ang_vel_btn", config.ang_vel_btn);
+    get_int_param("/teleop_btn", config.teleop_btn);
+    get_int_param("/standby_btn", config.standby_btn);
+    get_int_param("/autonomous_btn", config.autonomous_btn);
+    get_int_param("/speed_inc_btn", config.speed_inc_btn);
+    get_int_param("/speed_dec_btn", config.speed_dec_btn);
     return config;
 }
-
 
