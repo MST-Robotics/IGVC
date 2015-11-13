@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  INCLUDE_DIRS include
   LIBRARIES vision
   CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs
   DEPENDS system_lib
