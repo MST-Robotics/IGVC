@@ -65,8 +65,6 @@ const float MAX_RAD_SEC = 5;
  */
 const int ENCODER_PIN = 2;
 
-
-
 /**
  * @brief Pins used to control the Motor
  */
@@ -117,7 +115,7 @@ ros::NodeHandle node_handle;
 /**
  * @brief ROS message used for publishing the encoder data
  */
- std_msgs::UInt8 encoderMessage;
+std_msgs::UInt8 encoderMessage;
 
 /**
  * @brief ROS Subscriber for the Velocity Message
@@ -154,6 +152,7 @@ void setup()
 void loop() 
 {
     node_handle.spinOnce();
+    
     updateEncoder();
 
     //update the current time for multitasking
@@ -200,6 +199,12 @@ void velocityCallback(const std_msgs::Float64& msg)
     }
 }
 
+/**
+ * @brief The Function will send the updated encoder value to ROS
+ * 
+ * This Function is used to update the main ROS program with
+ * the current number of ticks per timestamp
+ */
 void updateEncoder()
 {
     //update the value of the message
@@ -214,7 +219,7 @@ void updateEncoder()
  * 
  * This Function is called whenever there is a change 
  * to the value of pin 2, it is part of the attachInterrupt routine
- * It updates the value of 
+ * It updates the value of encoder_ticks
  */
 void encoderCount()
 {
