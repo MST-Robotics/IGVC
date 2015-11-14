@@ -16,9 +16,8 @@
 
 controller_type:   xbox360
 
-lin_vel_btn:       1
-ang_vel_btn:       3
-//TODO make axis
+lin_vel_axis:      1
+ang_vel_axis:      3
 teleop_btn:        0
 standby_btn:       1
 

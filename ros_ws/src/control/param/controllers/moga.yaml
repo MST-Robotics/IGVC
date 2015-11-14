@@ -11,8 +11,8 @@
 
 controller_type:   moga
 
-lin_vel_btn:       1
-ang_vel_btn:       2
+lin_vel_axis:      1
+ang_vel_axis:      2
 
 teleop_btn:        0
 standby_btn:       1

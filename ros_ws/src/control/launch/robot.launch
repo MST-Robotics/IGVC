@@ -16,11 +16,11 @@
     
     <!-- Load parameter file -->
     <rosparam command="load" file="$(find control)/param/igvc.yaml"/>
-    <rosparam command="load" file="$(find control)/param/controllers/360.yaml"/>
+    <rosparam command="load" file="$(find control)/param/controllers/moga.yaml"/>
     
     <!-- Launch teleop configuration -->
-    <node pkg="control" type="remote_control_node" name="remote_control_node" output="screen"/>
-    <node pkg="control" type="teleop_mux_node" name="teleop_mux_node" output="screen"/>
+    <node pkg="control" type="remote_control_node" name="remote_control_node"/>
+    <node pkg="control" type="teleop_mux_node" name="teleop_mux_node"/>
     <node pkg="control" type="motor_controller_node" name="motor_controller_node"/>
     
     <!-- Arduino Stuff -->

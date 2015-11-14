@@ -15,7 +15,6 @@ MotorController::MotorController()
     left_vel_pub = nh.advertise<std_msgs::Float64>(LEFT_VEL_TOPIC, 1);
 
     //Check that the necessary parameters exist and set member variables appropriately
-    
     if(!nh.getParam("/robot_base", robot_base))
     {
     	ROS_ERROR("robot_base is not defined on parameter server");
@@ -36,8 +35,7 @@ MotorController::MotorController()
     {
     	ROS_ERROR("max_ang_vel is not defined on the parameter server");
     }
-    //TODO Stuff
-
+    
     unscaled_max_speed = (2 * max_lin_vel + max_ang_vel * robot_base) / (2 * wheel_rad);
 }
 

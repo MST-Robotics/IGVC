@@ -4,7 +4,8 @@
  * @brief Contains the struct ConfigValues.
  *
  * To use ConfigValues to access a config value:
- * add "ConfigValues config;" to the class constructor
+ * add "ConfigValues config;" to the class constructor and
+ * add "config = initConfigs()" where ever you need to use it
  * @see initConfigs()
  */
 
@@ -26,8 +27,8 @@ double max_ang_vel;
 
 //Controller Info
 std::string controller_type;
-int lin_vel_btn;
-int ang_vel_btn;
+int lin_vel_axis;
+int ang_vel_axis;
 int teleop_btn;
 int standby_btn;
 int autonomous_btn;

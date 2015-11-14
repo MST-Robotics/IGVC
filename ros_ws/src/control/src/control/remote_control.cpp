@@ -48,8 +48,8 @@ void RemoteControl::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
     {
         speed_modifier -= 0.01;
     }
-    cmd_vel.linear.x = msg->axes[config.lin_vel_btn] * speed_modifier;
-    cmd_vel.angular.z = msg->axes[config.ang_vel_btn];
+    cmd_vel.linear.x = msg->axes[config.lin_vel_axis] * speed_modifier;
+    cmd_vel.angular.z = msg->axes[config.ang_vel_axis];
 }
 
 void RemoteControl::update()
