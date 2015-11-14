@@ -91,7 +91,9 @@ private:
      */
     void twistCallback(const geometry_msgs::Twist::ConstPtr& msg);
     
-    //TODO comment
+    /**
+     * @brief Allows config values to be used. Ex: config.max_speed
+     */
     ConfigValues config;
     /**
      * @brief Sets all the fields in cmd_vel to 0 to ensure the robot is not moving

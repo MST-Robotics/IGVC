@@ -1,0 +1,28 @@
+#AXIS---------------
+#Y_AXIS_L_STICK:   1
+#X_AXIS_R_STICK:   3
+#BUTTONS------------
+#A_BUTTON:         0
+#B_BUTTON:         1
+#X_BUTTON:         2
+#Y_BUTTON:         3
+#LB_BUTTON:        4
+#RB_BUTTON:        5
+#BACK_BUTTON:      6
+#START_BUTTON:     7
+#POWER_BUTTON:     8
+
+
+
+controller_type:   xbox360
+
+lin_vel_btn:       1
+ang_vel_btn:       3
+//TODO make axis
+teleop_btn:        0
+standby_btn:       1
+
+autonomous_btn:    3
+speed_inc_btn:     5
+speed_dec_btn:     4
+turbo_btn:         2

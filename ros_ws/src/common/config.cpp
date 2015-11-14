@@ -1,5 +1,18 @@
-#include "config.h"
+/**
+ * @file config.cpp
+ * @brief ConfigValues functions
+ * These functions are used with the config values struct.
+ */
 
+#include "config.h"
+/**
+ * @brief Gets an integer parameter.
+ *
+ * Due to an issue with getting an int param directly, this function was made
+ *
+ * @param key_name The name of the config option
+ * @param config_var The variable to store the retrived value in
+ */
 void get_int_param(std::string key_name, int& config_var)
 {
     ros::NodeHandle nh; 
@@ -12,7 +25,12 @@ void get_int_param(std::string key_name, int& config_var)
     return;
 }
 
-
+/**
+ * @brief Initilizes the configs.
+ *
+ * Loads the config values from the parameter server.
+ *
+ */
 ConfigValues initConfigs()
 {
     ros::NodeHandle nh;

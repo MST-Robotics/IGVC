@@ -1,6 +1,11 @@
 /**
  * @file config.h
- * @brief A file containing the various things involving config files
+ * @struct ConfigValues
+ * @brief Contains the struct ConfigValues.
+ *
+ * To use ConfigValues to access a config value:
+ * add "ConfigValues config;" to the class constructor
+ * @see initConfigs()
  */
 
 #ifndef CONFIG_H_
@@ -33,9 +38,7 @@ int turbo_btn;
 
 };
 ConfigValues initConfigs();
-void get_int_param(std::string key_name, int & config_var); /**
-								
-*/
+void get_int_param(std::string key_name, int & config_var);
 
  
 #endif /* CONFIG_H_ */

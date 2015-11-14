@@ -51,7 +51,9 @@ private:
      */
     double speed_modifier;
 
-//TODO COMMENT
+    /**
+     * @brief Allows config values to be used. Ex: config.max_speed
+     */
     ConfigValues config;
 
     /**
