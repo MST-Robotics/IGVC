@@ -35,7 +35,10 @@ RemoteControl::RemoteControl(std::string twist_topic, std::string joy_topic)
     cmd_vel.angular.y = 0;
     cmd_vel.angular.z = 0;
     speed_modifier = 0.5;
-
+    
+    //Initilize the config values
+    config = initConfigs();
+    
     joy_sub = nh.subscribe<sensor_msgs::Joy>(twist_topic, 1, &RemoteControl::joyCallback, this);
     twist_pub = nh.advertise<geometry_msgs::Twist>(joy_topic, 1);
 }
