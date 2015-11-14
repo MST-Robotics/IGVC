@@ -17,7 +17,10 @@ RemoteControl::RemoteControl()
     cmd_vel.angular.y = 0;
     cmd_vel.angular.z = 0;
     speed_modifier = 0.5;
+    
+    //Initilize the config values
     config = initConfigs();
+    
     joy_sub = nh.subscribe<sensor_msgs::Joy>(JOY_TOPIC, 1, &RemoteControl::joyCallback, this);
     twist_pub = nh.advertise<geometry_msgs::Twist>(TELEOP_TOPIC, 1);
 }

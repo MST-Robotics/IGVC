@@ -11,8 +11,10 @@ TwistMux::TwistMux()
     //Ensure that the robot starts in a safe standby mode
     current_mode = Control::standby;
     stopRobot();
-    //Get remote values
+    
+    //Initilize the config values
     config = initConfigs();
+    
     //Setup publishers and subscribers
     joy_sub = nh.subscribe<sensor_msgs::Joy>(JOY_TOPIC, 1, &TwistMux::joyCallback, this);
 
