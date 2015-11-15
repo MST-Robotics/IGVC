@@ -12,6 +12,7 @@
 #include <ros.h>
 #include <std_msgs/Float64.h>
 #include <control/Encoder.h>
+#include <ros/time.h>
 
 /*************
  * Constants *
@@ -115,7 +116,7 @@ ros::NodeHandle node_handle;
 /**
  * @brief ROS message used for publishing the encoder data
  */
-std_msgs::UInt8 encoderMessage;
+control::Encoder encoderMessage;
 
 /**
  * @brief ROS Subscriber for the Velocity Message
@@ -208,7 +209,8 @@ void velocityCallback(const std_msgs::Float64& msg)
 void updateEncoder()
 {
     //update the value of the message
-    encoderMessage.data = encoder_ticks;
+    encoderMessage.ticks = encoder_ticks;
+    encoderMessage.header.stamp = node_handle.now();
     
     //publish message
     encoderPub.publish(&encoderMessage);

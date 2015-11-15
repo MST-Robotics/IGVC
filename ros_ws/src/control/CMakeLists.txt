@@ -9,6 +9,13 @@ find_package(catkin REQUIRED COMPONENTS
     message_generation
 )
 
+################################################
+## Declare ROS messages, services and actions ##
+################################################
+## Generate message in the 'msg' folder
+add_message_files(FILES Encoder.msg)
+generate_messages(DEPENDENCIES std_msgs)
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -19,14 +26,6 @@ catkin_package(
     DEPENDS system_lib
     CATKIN_DEPENDS message_runtime
 )
-
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-## Generate message in the 'msg' folder
-add_message_files(FILES Encoder.msg)
-
-
 
 ###########
 ## Build ##
