@@ -65,6 +65,14 @@ const std::string RIGHT_VEL_TOPIC = "right_vel";
  * @brief The topic that the left wheel angular velocity will be published on
  */
 const std::string LEFT_VEL_TOPIC = "left_vel";
+/**
+ * @brief The topic that images for processing will be received from
+ */
+const std::string VISION_INCOMING_TOPIC = "usb_cam/image_raw";
+/**
+ * @brief The topic that images are published to after being processed
+ */
+const std::string VISION_OUTGOING_TOPIC = "processed_image";
 
 //Node name constants
 /**
@@ -79,6 +87,10 @@ const std::string TELEOP_MUX_NODE = "teleop_mux_node";
  * @brief The node name for the motor_controller node
  */
 const std::string MOTOR_CONTROLLER_NODE = "motor_controller_node";
+/**
+ * @brief THe node name for the vision node
+ */
+const std::string VISION_NODE = "vision_node";
 
 //Loop rate
 /**

@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## catkin specific configuration ##
 ###################################
 catkin_package(
+  INCLUDE_DIRS include
   LIBRARIES vision
   CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs
   DEPENDS system_lib
@@ -24,5 +25,11 @@ catkin_package(
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  include/vision/
+  ../common/
 )
+
+add_executable(vision_node src/vision/vision_node.cpp src/vision/vision.cpp)
+add_dependencies(vision_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(vision_node ${catkin_LIBRARIES})
 
