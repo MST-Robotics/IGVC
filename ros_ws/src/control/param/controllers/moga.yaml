@@ -18,6 +18,6 @@ teleop_btn:        0
 standby_btn:       1
 
 autonomous_btn:    3
-speed_inc_btn:     4
-speed_dec_btn:     5
+speed_inc_btn:     5
+speed_dec_btn:     4
 turbo_btn:         2
