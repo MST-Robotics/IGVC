@@ -1,0 +1,23 @@
+#1_BUTTON:         0
+#2_BUTTON:         1
+#A_BUTTON:         2
+#B_BUTTON:         3
+#PLUS_BUTTON:      4
+#MINUS_BUTTON:     5
+#ROCKER_LEFT:      6
+#ROCKER_RIGHT:     7
+#ROCKER_UP:        8
+#ROCKER_DOWN:      9
+#HOME_BUTTON:      10
+
+CONTROLLER_TYPE:   wiimote
+
+LINEAR_VEL:        
+ANGULAR_VEL:       
+TELEOP:            2
+STANDBY:           10
+
+AUTO:              3
+SPEED_INC:         4
+SPEED_DEC:         5
+TURBO:             3

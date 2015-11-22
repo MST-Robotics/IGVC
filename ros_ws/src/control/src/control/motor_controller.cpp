@@ -35,7 +35,7 @@ MotorController::MotorController()
     {
     	ROS_ERROR("max_ang_vel is not defined on the parameter server");
     }
-
+    
     unscaled_max_speed = (2 * max_lin_vel + max_ang_vel * robot_base) / (2 * wheel_rad);
 }
 
