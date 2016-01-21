@@ -33,6 +33,14 @@ const std::string RIGHT_VEL_TOPIC = "right_vel";
  * @brief The topic that the left wheel angular velocity will be published on
  */
 const std::string LEFT_VEL_TOPIC = "left_vel";
+/**
+ * @brief The topic that the left encoder will publish on
+ */
+const std::string LEFT_ENCODER_TOPIC = "left_tick";
+/**
+ * @brief The topic that the right encoder will publish on
+ */
+const std::string RIGHT_ENCODER_TOPIC = "right_tick";
 
 //Node name constants
 /**

@@ -12,6 +12,9 @@
 #include <std_msgs/Float64.h>
 #include "constants.h"
 
+/* Custom messages - This file should be Auto generated */
+#include "control/Encoder.h"
+
 class MotorController
 {
 private:
@@ -36,6 +39,16 @@ private:
     double unscaled_max_speed;
 
     /**
+     * @brief The previous left encoder time read
+     */
+    ros::Time left_prev_time;
+
+    /**
+     * @brief The previous right encoder time read
+     */
+    ros::Time right_prev_time;
+
+    /**
      * @brief The right velocity to be published
      */
     std_msgs::Float64 right_vel;
@@ -49,6 +62,26 @@ private:
      * @brief The twist message subscriber
      */
     ros::Subscriber twist_sub;
+
+    /**
+     * @brief The number of ticks read from the left encoder in a time interval
+     */
+    control::Encoder left_ticks;
+
+    /**
+     * @brief The number of ticks read from the right encoder in a time interval
+     */
+    control::Encoder right_ticks;
+
+    /**
+     * @brief The subscriber for the left encoder
+     */
+    ros::Subscriber left_encoder;
+
+    /**
+     * @brief The subscriber for the right encoder
+     */
+    ros::Subscriber right_encoder;
 
     /**
      * @brief The right wheel velocity publisher
@@ -74,6 +107,24 @@ private:
      * @param msg The message which is received from the twist publisher
      */
     void twistCallback(const geometry_msgs::Twist::ConstPtr& msg);
+
+    /**
+     * @brief The callback function for the right encoder message
+     *
+     * This function accepts Encoder messages and records the number of ticks in a time interval for the right wheel
+     *
+     * @param msg The message which is received from the right encoder publisher
+     */
+    void rightEncoderCallback(const control::Encoder::ConstPtr& msg);
+
+    /**
+     * @brief The callback function for the right encoder message
+     *
+     * This function accepts Encoder messages and records the number of ticks in a time interval for the left wheel
+     *
+     * @param msg The message which is received from the right encoder publisher
+     */
+    void leftEncoderCallback(const control::Encoder::ConstPtr& msg);
 
     /**
      * @brief Calculates the right wheel angular velocity based on a differential drive model

@@ -13,6 +13,9 @@ MotorController::MotorController()
     twist_sub = nh.subscribe<geometry_msgs::Twist>(CONTROL_TOPIC, 1, &MotorController::twistCallback, this);
     right_vel_pub = nh.advertise<std_msgs::Float64>(RIGHT_VEL_TOPIC, 1);
     left_vel_pub = nh.advertise<std_msgs::Float64>(LEFT_VEL_TOPIC, 1);
+    left_encoder = nh.subscribe<control::Encoder>(LEFT_ENCODER_TOPIC, 5, &MotorController::leftEncoderCallback, this);
+    right_encoder = nh.subscribe<control::Encoder>(RIGHT_ENCODER_TOPIC, 5, &MotorController::rightEncoderCallback,
+                                                   this);
 
     //Check that the necessary parameters exist and set member variables appropriately
     if(!nh.getParam("/robot_base", robot_base))
@@ -43,6 +46,16 @@ void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
     right_vel.data = getRightVel(msg->linear.x, msg->angular.z);
     left_vel.data = getLeftVel(msg->linear.x, msg->angular.z);
+}
+
+void MotorController::rightEncoderCallback(const control::Encoder::ConstPtr& msg)
+{
+
+}
+
+void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
+{
+
 }
 
 double MotorController::getRightVel(const double lin_vel, const double ang_vel)
