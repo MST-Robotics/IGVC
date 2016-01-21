@@ -73,6 +73,8 @@ const int FORWARD_PWM_PIN = 5;
 const int REVERSE_PWM_PIN = 6;
 const int ENABLE_PIN = A3;
 
+<<<<<<< Temporary merge branch 1
+=======
 /**
  * @brief Const used to change the Motor Whine Divisor
  * 
@@ -80,11 +82,24 @@ const int ENABLE_PIN = A3;
  */
 const int FREQUENCY_DIVISOR = 8;
 
+>>>>>>> Temporary merge branch 2
 /**
  * @brief Float used to scale the Speed to
  */
 float desired_speed = 0;
 
+/**
+ * @brief Boolean used to store the desired direction
+ * 
+ * True is Forward, and False is Backwards
+ */
+float desired_direction;
+/**
+ * @brief Place to Change which Wheel we want to Program
+ * 
+ * True is Forward, and False is Backwards
+ */
+float desired_direction;
 
 /**
  * @brief Values to be updated when the inturrupt is triggered for encoder
@@ -138,6 +153,10 @@ ros::Publisher encoderPub(ENCODER_TOPIC, &encoderMessage);
 
 void setup() 
 {
+    //Fix the Motor Whine
+    //After testing on IGVC 8 gave the best results
+    set_pwm_frequency(FREQUENCY_DIVISOR);
+
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
     pinMode(REVERSE_PWM_PIN, OUTPUT);
@@ -155,7 +174,7 @@ void setup()
     node_handle.advertise(encoderPub);
 
     //Set the Inturupt on Pin 2
-    attachInterrupt(0, encoderCount, CHANGE);
+    attachInterrupt(0, encoderCount, RISING);
 }
 
 void loop() 
@@ -172,6 +191,8 @@ void loop()
     {
         calculateSpeed();
     }
+    
+    node_handle.spinOnce();
 }
 
 /**
@@ -185,6 +206,9 @@ void loop()
 void velocityCallback(const std_msgs::Float64& msg)
 {
     desired_speed = fScale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
+    //If msg.data is positive, the set to TRUE
+    desired_direction = (msg.data > 0);
+    
     if(msg.data > 0)
     {
         //Go Forward
@@ -216,12 +240,16 @@ void velocityCallback(const std_msgs::Float64& msg)
  */
 void updateEncoder()
 {
+<<<<<<< Temporary merge branch 1
     //update the value of the message
     encoderMessage.ticks = encoder_ticks;
     encoderMessage.header.stamp = node_handle.now();
     
     //publish message
     encoderPub.publish(&encoderMessage);
+
+    //reset the count to 0
+    encoder_ticks = 0;
 }
 
 /**
@@ -233,15 +261,14 @@ void updateEncoder()
  */
 void encoderCount()
 {
-    encoder_pos_current = digitalRead(ENCODER_PIN); 
-    
-    if ((encoder_pos_last == LOW) && 
-        (encoder_pos_current == HIGH)) 
-    { 
+    if(desired_direction)
+    {
         encoder_ticks++; 
     }
-    
-    encoder_pos_last = encoder_pos_current;
+    else
+    {
+        encoder_ticks--;
+    }
 }
 
 /**
@@ -357,4 +384,42 @@ float fScale( float original_min, float original_max, float new_begin,
     }
 
     return ranged_value;
+}
+
+/**
+ * @brief The Function will change frequency of Timer 0
+ * 
+ * This function accepts as input a divisor that will change
+ * the frequency of the Timer that controlls the PWM signal
+ *  
+ * @param divisor -what we divide the timer frequency by
+ */
+void set_pwm_frequency(int divisor) 
+{
+    byte mode;
+    switch(divisor) 
+    {
+      case 1: 
+          mode = 0x01; 
+          break;
+      case 8: 
+          mode = 0x02; 
+          break;
+      case 64: 
+          mode = 0x03; 
+          break;
+      case 256: 
+          mode = 0x04;
+          break;
+      case 1024: 
+          mode = 0x05; 
+          break;
+      default: 
+          return;
+    }
+
+    //set mode of timer 0
+    TCCR0B = TCCR0B & 0b11111000 | mode;
+
+    return;
 }
