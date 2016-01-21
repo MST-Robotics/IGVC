@@ -79,11 +79,16 @@ const int ENABLE_PIN = A3;
 float desired_speed = 0;
 
 /**
+ * @brief Boolean used to store the desired direction
+ * 
+ * True is Forward, and False is Backwards
+ */
+float desired_direction;
+
+/**
  * @brief Values to be updated when the inturrupt is triggered for encoder
  */
 volatile unsigned int encoder_ticks = 0;
-volatile int encoder_pos_last = LOW;
-volatile int encoder_pos_current = LOW;
 
 /**
  * @brief Values used to keep track of current time for multitasking
@@ -147,13 +152,11 @@ void setup()
     node_handle.advertise(encoderPub);
 
     //Set the Inturupt on Pin 2
-    attachInterrupt(0, encoderCount, CHANGE);
+    attachInterrupt(0, encoderCount, RISING);
 }
 
 void loop() 
 {
-    node_handle.spinOnce();
-    
     updateEncoder();
 
     //update the current time for multitasking
@@ -164,6 +167,8 @@ void loop()
     {
         calculateSpeed();
     }
+    
+    node_handle.spinOnce();
 }
 
 /**
@@ -177,6 +182,9 @@ void loop()
 void velocityCallback(const std_msgs::Float64& msg)
 {
     desired_speed = fScale(0, MAX_RAD_SEC, 0, 255, abs(msg.data), 0);
+    //If msg.data is positive, the set to TRUE
+    desired_direction = (msg.data > 0);
+    
     if(msg.data > 0)
     {
         //Go Forward
@@ -214,6 +222,9 @@ void updateEncoder()
     
     //publish message
     encoderPub.publish(&encoderMessage);
+
+    //reset the count to 0
+    encoder_ticks = 0;
 }
 
 /**
@@ -225,15 +236,14 @@ void updateEncoder()
  */
 void encoderCount()
 {
-    encoder_pos_current = digitalRead(ENCODER_PIN); 
-    
-    if ((encoder_pos_last == LOW) && 
-        (encoder_pos_current == HIGH)) 
-    { 
+    if(desired_direction)
+    {
         encoder_ticks++; 
     }
-    
-    encoder_pos_last = encoder_pos_current;
+    else
+    {
+        encoder_ticks--;
+    }
 }
 
 /**
