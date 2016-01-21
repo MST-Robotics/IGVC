@@ -3,4 +3,5 @@ wheel_rad: 0.19
 max_speed: 5.0
 max_lin_vel: 1.0
 max_ang_vel: 1.0
+encoder_res: 100
 

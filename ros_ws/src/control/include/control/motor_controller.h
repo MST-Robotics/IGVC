@@ -10,6 +10,8 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
+#include <tf/transform_broadcaster.h>
+#include <nav_msgs/Odometry.h>
 #include "constants.h"
 
 /* Custom messages - This file should be Auto generated */
@@ -39,6 +41,11 @@ private:
     double unscaled_max_speed;
 
     /**
+     * @brief The encoder resolution in ticks/s
+     */
+    double encoder_res;
+
+    /**
      * @brief The previous left encoder time read
      */
     ros::Time left_prev_time;
@@ -66,12 +73,12 @@ private:
     /**
      * @brief The number of ticks read from the left encoder in a time interval
      */
-    control::Encoder left_ticks;
+    double left_measured_dist;
 
     /**
      * @brief The number of ticks read from the right encoder in a time interval
      */
-    control::Encoder right_ticks;
+    double right_measured_dist;
 
     /**
      * @brief The subscriber for the left encoder

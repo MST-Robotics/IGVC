@@ -38,6 +38,10 @@ MotorController::MotorController()
     {
     	ROS_ERROR("max_ang_vel is not defined on the parameter server");
     }
+    if(!nh.getParam("/encoder_res", encoder_res))
+    {
+        ROS_ERROR("encoder_res is not defined on the parameter server");
+    }
     
     unscaled_max_speed = (2 * max_lin_vel + max_ang_vel * robot_base) / (2 * wheel_rad);
 }
@@ -50,12 +54,23 @@ void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 
 void MotorController::rightEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
+    double dt = (msg->header.stamp.toSec() - right_prev_time.toSec());
 
+    //Calculate wheel velocity in m/s
+    right_measured_dist = (static_cast<double>(msg->ticks) * wheel_rad * 2 * M_PI)/encoder_res;
+
+    //Set the previous time for next calculation
+    right_prev_time = msg->header.stamp;
 }
 
 void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
+    double dt = (msg->header.stamp.toSec() - right_prev_time.toSec());
 
+    //Calculate wheel velocity in m/s
+    left_measured_dist = (static_cast<double>(msg->ticks) * wheel_rad * 2 * M_PI)/encoder_res;
+
+    left_prev_time = msg->header.stamp;
 }
 
 double MotorController::getRightVel(const double lin_vel, const double ang_vel)
@@ -78,6 +93,28 @@ double MotorController::scale(const double val, const double pre_min, const doub
 
 void MotorController::update()
 {
+    //Calculate robot linear and angular velocities
+    tf::TransformBroadcaster odom_broadcaster;
+    geometry_msgs::TransformStamped odom_trans;
+    geometry_msgs::Quaternion rot;
+    double trans, theta;
+
+    theta = (right_measured_dist - left_measured_dist) / robot_base;
+    tf::quaternionTFToMsg(tf::createQuaternionFromYaw(theta), rot);
+    trans = (right_measured_dist + left_measured_dist) / 2;
+
+    //Build odometry header message
+    odom_trans.header.stamp = ros::Time::now();
+    odom_trans.child_frame_id = "odom";
+    odom_trans.child_frame_id = "base_link";
+
+    odom_trans.transform.translation.x = trans * cos(theta);
+    odom_trans.transform.translation.y = trans * sin(theta);
+    odom_trans.transform.translation.z = 0;
+    odom_trans.transform.rotation = rot;
+
+    odom_broadcaster.sendTransform(odom_trans);
+
     right_vel_pub.publish(right_vel);
     left_vel_pub.publish(left_vel);
 }
