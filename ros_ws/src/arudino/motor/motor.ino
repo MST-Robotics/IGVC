@@ -26,7 +26,7 @@
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define LEFT_WHEEL
+#define RIGHT_WHEEL
 
 #if defined RIGHT_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
@@ -91,12 +91,6 @@ float desired_speed = 0;
  * True is Forward, and False is Backwards
  */
 float desired_direction;
-/**
- * @brief Place to Change which Wheel we want to Program
- * 
- * True is Forward, and False is Backwards
- */
-float desired_direction;
 
 /**
  * @brief Values to be updated when the inturrupt is triggered for encoder
@@ -122,6 +116,7 @@ volatile unsigned int encoder_ticks = 0;
 void encoderCount();
 void calculateSpeed();
 void updateEncoder();
+void set_pwm_frequency(int divisor);
 void velocityCallback(const std_msgs::Float64& msg);
 float fScale( float originalMin, float originalMax, float newBegin, 
               float newEnd, float inputValue, float curve);
