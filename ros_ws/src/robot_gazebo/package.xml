@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+	  <name>robot_gazebo</name>
+	  <version>0.0.0</version>
+	  <description>The robot_gazebo package</description>
+	
+	  <maintainer email="mia2n4@mst.edu">Matt Anderson</maintainer>
+	
+	  <license>BSD</license>
+	
+	  <url type="website">http://robotics.mst.edu</url> 
+	  <url type="repository">https://github.com/MST-Robotics/IGVC</url>
+	  
+	  <author email="mia2n4@mst.edu">Matt Anderson</author> 
+	
+	  <buildtool_depend>catkin</buildtool_depend>
+	  <build_depend>robot_description</build_depend>
+	  <run_depend>hector_gazebo_plugins</run_depend>
+	  <run_depend>gazebo_ros</run_depend>
+	  <run_depend>gazebo_plugins</run_depend>
+	  <run_depend>xacro</run_depend>
+	  <run_depend>robot_description</run_depend>
+	  <run_depend>tf</run_depend>
+
+</package>

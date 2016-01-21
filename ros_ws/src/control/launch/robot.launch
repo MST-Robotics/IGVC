@@ -2,7 +2,7 @@
     <!-- Define arguments and defaults -->
     <arg name="robot_addr" default="localhost"/>
     <arg name="robot_launch" default="igvc.launch"/>
-    
+    <arg name="controller_type" default="360.yaml" />
     <include file="$(find control)/launch/$(arg robot_launch)" />
 
     <!-- Connect to the specified master -->
@@ -16,6 +16,7 @@
     
     <!-- Load parameter file -->
     <rosparam command="load" file="$(find control)/param/igvc.yaml"/>
+    <rosparam command="load" file="$(find control)/param/controllers/$(arg controller_type)"/>
     
     <!-- Launch teleop configuration -->
     <node pkg="control" type="remote_control_node" name="remote_control_node"/>
@@ -25,5 +26,8 @@
     <!-- Arduino Stuff -->
     <node name="arduino_right" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0"/>
     <node name="arduino_left" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1"/>
+
+    <!-- Sensing and mapping files -->
+    <include file="$(find control)/launch/slam.launch"/>
     
 </launch>

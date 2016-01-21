@@ -6,39 +6,7 @@
 #ifndef COMMON_CONSTANTS_H_
 #define COMMON_CONSTANTS_H_
 
-//Controller Constants
-/**
- * @brief The index of the y axis on the left stick of the controller
- */
-const int Y_AXIS_L_STICK = 1;
-/**
- * @brief The index of the x axis on the right stick of the controller
- */
-const int X_AXIS_R_STICK = 2;
-/**
- * @brief The index of the A button on the controller
- */
-const int A_BUTTON = 0;
-/**
- * @brief The index of the B button on the controller
- */
-const int B_BUTTON = 1;
-/**
- * @brief The index of the X button on the controller
- */
-const int X_BUTTON = 2;
-/**
- * @brief The index of the Y button on the controller
- */
-const int Y_BUTTON = 3;
-/**
- * @brief The index of the LB button on the controller
- */
-const int LB_BUTTON = 4;
-/**
- * @brief The index of the RB button on the controller
- */
-const int RB_BUTTON = 5;
+#include "config.h"
 
 //Topic name constants
 /**

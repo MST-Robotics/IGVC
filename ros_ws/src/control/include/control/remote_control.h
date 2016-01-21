@@ -52,6 +52,11 @@ private:
     double speed_modifier;
 
     /**
+     * @brief Allows config values to be used. Ex: config.max_speed
+     */
+    ConfigValues config;
+
+    /**
      * @brief The callback function for joy messages
      *
      * This function accepts joy messages and converts them into a twist format in the form of cmd_vel.  It will change
