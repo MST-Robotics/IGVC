@@ -11,6 +11,7 @@
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
+#include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include "constants.h"
 
@@ -54,6 +55,31 @@ private:
      * @brief The left velocity to be published
      */
     std_msgs::Float64 left_vel;
+
+    /**
+     * @brief The linear displacement of the left wheel since the last message
+     */
+    double displacement_left;
+
+    /**
+     * @brief The linear displacement of the right wheel since the last message
+     */
+    double displacement_right;
+
+    /**
+     * @brief The previous angular displacement of the robot
+     */
+    double prev_theta;
+
+    /**
+     * @brief The tf transform to be published specifying odometry
+     */
+    geometry_msgs::TransformStamped odom_trans;
+
+    /**
+     * @brief The tf broadcaster for the odom transform
+     */
+    tf::TransformBroadcaster odom_broadcaster;
 
     /**
      * @brief The twist message subscriber
@@ -106,6 +132,15 @@ private:
     void twistCallback(const geometry_msgs::Twist::ConstPtr& msg);
 
     /**
+    * @brief The callback function for the right encoder message
+    *
+    * This function accepts Encoder messages and records the number of ticks in a time interval for the left wheel
+    *
+    * @param msg The message which is received from the right encoder publisher
+    */
+    void leftEncoderCallback(const control::Encoder::ConstPtr& msg);
+
+    /**
      * @brief The callback function for the right encoder message
      *
      * This function accepts Encoder messages and records the number of ticks in a time interval for the right wheel
@@ -113,15 +148,6 @@ private:
      * @param msg The message which is received from the right encoder publisher
      */
     void rightEncoderCallback(const control::Encoder::ConstPtr& msg);
-
-    /**
-     * @brief The callback function for the right encoder message
-     *
-     * This function accepts Encoder messages and records the number of ticks in a time interval for the left wheel
-     *
-     * @param msg The message which is received from the right encoder publisher
-     */
-    void leftEncoderCallback(const control::Encoder::ConstPtr& msg);
 
     /**
      * @brief Calculates the right wheel angular velocity based on a differential drive model

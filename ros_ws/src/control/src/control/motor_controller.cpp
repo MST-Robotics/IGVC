@@ -44,6 +44,15 @@ MotorController::MotorController()
         ROS_ERROR("encoder_res is not defined on the parameter server");
     }
 
+    //Setup odom tf link
+    odom_trans.header.stamp = ros::Time::now();
+    odom_trans.header.frame_id = "odom";
+    odom_trans.child_frame_id = "base_link";
+    odom_trans.transform.translation.x = 0;
+    odom_trans.transform.translation.y = 0;
+    odom_trans.transform.translation.z = 0;
+    prev_theta = 0;
+
     //Setup the joint state message
     joint_state.name.resize(2);
     joint_state.position.resize(2);
@@ -61,19 +70,10 @@ void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
     left_vel.data = getLeftVel(msg->linear.x, msg->angular.z);
 }
 
-void MotorController::rightEncoderCallback(const control::Encoder::ConstPtr& msg)
-{
-    //Calculate rotational position of the wheel
-    joint_state.position[1] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
-
-    if(joint_state.position[1] > M_PI)
-        joint_state.position[1] -= 2*M_PI;
-    else if(joint_state.position[1] < -M_PI)
-        joint_state.position[1] += 2*M_PI;
-}
-
 void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
+    displacement_left = ((M_PI * robot_base) / encoder_res) * msg->ticks;
+
     //Calculate rotational position of the wheel
     joint_state.position[0] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
 
@@ -81,6 +81,19 @@ void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
         joint_state.position[0] -= 2*M_PI;
     else if(joint_state.position[0] < -M_PI)
         joint_state.position[0] += 2*M_PI;
+}
+
+void MotorController::rightEncoderCallback(const control::Encoder::ConstPtr& msg)
+{
+    displacement_right = ((M_PI * robot_base) / encoder_res) * msg->ticks;
+
+            //Calculate rotational position of the wheel
+    joint_state.position[1] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
+
+    if(joint_state.position[1] > M_PI)
+        joint_state.position[1] -= 2*M_PI;
+    else if(joint_state.position[1] < -M_PI)
+        joint_state.position[1] += 2*M_PI;
 }
 
 double MotorController::getRightVel(const double lin_vel, const double ang_vel)
@@ -105,6 +118,19 @@ void MotorController::update()
 {
     joint_state.header.stamp = ros::Time::now();
     joint_state_pub.publish(joint_state);
+
+    odom_trans.header.stamp = ros::Time::now();
+
+    double displacement = (displacement_right + displacement_left) / 2;
+    double theta = (displacement_right - displacement_left) / robot_base;
+
+    odom_trans.transform.translation.x += displacement * cos(theta);
+    odom_trans.transform.translation.y += displacement * sin(theta);
+    odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(prev_theta + theta);
+
+    odom_broadcaster.sendTransform(odom_trans);
+
+    prev_theta += theta;
 
     right_vel_pub.publish(right_vel);
     left_vel_pub.publish(left_vel);
