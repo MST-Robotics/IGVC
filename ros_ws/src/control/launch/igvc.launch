@@ -4,5 +4,7 @@
     
     <!-- Launch nodes to create a tf tree from the urdf model -->
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" />
-    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_st_pub" />
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_st_pub" >
+            <rosparam param="source_list">["wheel_state"]</rosparam>
+    </node>
 </launch>

@@ -16,6 +16,7 @@ MotorController::MotorController()
     left_encoder = nh.subscribe<control::Encoder>(LEFT_ENCODER_TOPIC, 5, &MotorController::leftEncoderCallback, this);
     right_encoder = nh.subscribe<control::Encoder>(RIGHT_ENCODER_TOPIC, 5, &MotorController::rightEncoderCallback,
                                                    this);
+    joint_state_pub = nh.advertise<sensor_msgs::JointState>("wheel_states", 1);
 
     //Check that the necessary parameters exist and set member variables appropriately
     if(!nh.getParam("/robot_base", robot_base))
@@ -42,6 +43,14 @@ MotorController::MotorController()
     {
         ROS_ERROR("encoder_res is not defined on the parameter server");
     }
+
+    //Setup the joint state message
+    joint_state.name.resize(2);
+    joint_state.position.resize(2);
+    joint_state.name[0] = "left_wheel_joint";
+    joint_state.name[1] = "right_wheel_joint";
+    joint_state.position[0] = 0;
+    joint_state.position[1] = 0;
     
     unscaled_max_speed = (2 * max_lin_vel + max_ang_vel * robot_base) / (2 * wheel_rad);
 }
@@ -54,23 +63,24 @@ void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 
 void MotorController::rightEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
-    double dt = (msg->header.stamp.toSec() - right_prev_time.toSec());
+    //Calculate rotational position of the wheel
+    joint_state.position[1] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
 
-    //Calculate wheel velocity in m/s
-    right_measured_dist = (static_cast<double>(msg->ticks) * wheel_rad * 2 * M_PI)/encoder_res;
-
-    //Set the previous time for next calculation
-    right_prev_time = msg->header.stamp;
+    if(joint_state.position[1] > M_PI)
+        joint_state.position[1] -= 2*M_PI;
+    else if(joint_state.position[1] < -M_PI)
+        joint_state.position[1] += 2*M_PI;
 }
 
 void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
-    double dt = (msg->header.stamp.toSec() - right_prev_time.toSec());
+    //Calculate rotational position of the wheel
+    joint_state.position[0] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
 
-    //Calculate wheel velocity in m/s
-    left_measured_dist = (static_cast<double>(msg->ticks) * wheel_rad * 2 * M_PI)/encoder_res;
-
-    left_prev_time = msg->header.stamp;
+    if(joint_state.position[0] > M_PI)
+        joint_state.position[0] -= 2*M_PI;
+    else if(joint_state.position[0] < -M_PI)
+        joint_state.position[0] += 2*M_PI;
 }
 
 double MotorController::getRightVel(const double lin_vel, const double ang_vel)
@@ -93,27 +103,8 @@ double MotorController::scale(const double val, const double pre_min, const doub
 
 void MotorController::update()
 {
-    //Calculate robot linear and angular velocities
-    tf::TransformBroadcaster odom_broadcaster;
-    geometry_msgs::TransformStamped odom_trans;
-    geometry_msgs::Quaternion rot;
-    double trans, theta;
-
-    theta = (right_measured_dist - left_measured_dist) / robot_base;
-    tf::quaternionTFToMsg(tf::createQuaternionFromYaw(theta), rot);
-    trans = (right_measured_dist + left_measured_dist) / 2;
-
-    //Build odometry header message
-    odom_trans.header.stamp = ros::Time::now();
-    odom_trans.child_frame_id = "odom";
-    odom_trans.child_frame_id = "base_link";
-
-    odom_trans.transform.translation.x = trans * cos(theta);
-    odom_trans.transform.translation.y = trans * sin(theta);
-    odom_trans.transform.translation.z = 0;
-    odom_trans.transform.rotation = rot;
-
-    odom_broadcaster.sendTransform(odom_trans);
+    joint_state.header.stamp = ros::Time::now();
+    joint_state_pub.publish(joint_state);
 
     right_vel_pub.publish(right_vel);
     left_vel_pub.publish(left_vel);

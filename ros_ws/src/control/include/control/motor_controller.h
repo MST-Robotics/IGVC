@@ -10,7 +10,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
-#include <tf/transform_broadcaster.h>
+#include <sensor_msgs/JointState.h>
 #include <nav_msgs/Odometry.h>
 #include "constants.h"
 
@@ -46,16 +46,6 @@ private:
     double encoder_res;
 
     /**
-     * @brief The previous left encoder time read
-     */
-    ros::Time left_prev_time;
-
-    /**
-     * @brief The previous right encoder time read
-     */
-    ros::Time right_prev_time;
-
-    /**
      * @brief The right velocity to be published
      */
     std_msgs::Float64 right_vel;
@@ -71,14 +61,9 @@ private:
     ros::Subscriber twist_sub;
 
     /**
-     * @brief The number of ticks read from the left encoder in a time interval
+     * @brief The joint state message to be published containing the left and right wheel positions
      */
-    double left_measured_dist;
-
-    /**
-     * @brief The number of ticks read from the right encoder in a time interval
-     */
-    double right_measured_dist;
+    sensor_msgs::JointState joint_state;
 
     /**
      * @brief The subscriber for the left encoder
@@ -99,6 +84,11 @@ private:
      * @brief The left wheel velocity publisher
      */
     ros::Publisher left_vel_pub;
+
+    /**
+     * @brief The joint state publisher for the left and right wheel positions
+     */
+    ros::Publisher joint_state_pub;
 
     /**
      * @brief The ros node handle
