@@ -7,8 +7,6 @@
  * 
  */
 
-#define USB_CON
-
 #include <ros.h>
 #include <std_msgs/Float64.h>
 #include <control/Encoder.h>
@@ -26,38 +24,28 @@
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define RIGHT_WHEEL
+#define R_WHEEL
 
-#if defined RIGHT_WHEEL
+#if defined R_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
 const char* ENCODER_TOPIC = "right_tick";
-#elif defined LEFT_WHEEL
+#elif defined L_WHEEL
 const char* VELOCITY_TOPIC = "left_vel";
 const char* ENCODER_TOPIC = "left_tick";
 #endif
 
 /**
- * @brief Define Pi for use in conversion
- */
-const float PI_CONST = 3.14159265359;
-
-/**
  * @brief value for the desierd refresh rate of the encoder
  * 
- * Set to 30Hz
+ * Variable is the number of Millisecond Delay between publishes
  */
- const float REFRESH_RATE = 33.3;
-
-/**
- * @brief Define constants for the Encoder Calculation
- */
-const float WHEEL_RADIUS = 8.5; //Wheel Radius in inches
-const float WHEEL_CIRCUMFRANCE = (WHEEL_RADIUS*PI_CONST*2);
-const int GEAR_RATIO = 2;
-const int TICKS_PER_ROTATION = 200/GEAR_RATIO;
+ const float REFRESH_RATE = 1000;
  
 /**
  * @brief Radians Per Second at full Throtle
+ * 
+ * todo !!!!!!!STILL NEEDS TO BE UPDATED!!!!!!!!!
+ * 
  */
 const float MAX_RAD_SEC = 5;
 
@@ -69,8 +57,8 @@ const int ENCODER_PIN = 2;
 /**
  * @brief Pins used to control the Motor
  */
+const int REVERSE_PWM_PIN = 4;
 const int FORWARD_PWM_PIN = 5;
-const int REVERSE_PWM_PIN = 6;
 const int ENABLE_PIN = A3;
 
 /**
@@ -103,18 +91,10 @@ volatile unsigned int encoder_ticks = 0;
  int current_mills = 0;
  int old_mills = 0;
 
- /**
-  * @brief Values used to calculate speed from the encoder
-  */
-  int ticks_per_cycle = 0;
-  int ticks_per_cycle_old = 0;
-  float current_speed = 0;
-
 /************************
  * Forward Declerations *
  ************************/
 void encoderCount();
-void calculateSpeed();
 void updateEncoder();
 void set_pwm_frequency(int divisor);
 void velocityCallback(const std_msgs::Float64& msg);
@@ -169,17 +149,17 @@ void setup()
 
 void loop() 
 {
-    updateEncoder();
-
     //update the current time for multitasking
     current_mills = millis();
     
-    //Get the speed of wheel at a rate of 30Htz
-    if(current_mills-old_mills >= REFRESH_RATE)
+    //Only update the Encoder date when the Refresh Rate says to
+    if(abs(current_mills-old_mills) >= REFRESH_RATE)
     {
-        calculateSpeed();
+        updateEncoder();
+        old_mills = current_mills;
     }
-    
+
+    //Only used to get the messages from ROS
     node_handle.spinOnce();
 }
 
@@ -256,28 +236,6 @@ void encoderCount()
     {
         encoder_ticks--;
     }
-}
-
-/**
- * @brief The Function will calculate the current speed
- * 
- * This function is called once durring each refresh rate
- * It calculates the current speed based on the encoder readings
- */
-void calculateSpeed()
-{
-    ticks_per_cycle = encoder_ticks;
-
-    //calculates speed in (inces per .03 seconds)
-    //*************************************************
-    //TEMPORARY --WILL UPDATE WITH PROPER UNITS LATER--
-    //*************************************************
-    current_speed = ((ticks_per_cycle-ticks_per_cycle_old) /
-                     (TICKS_PER_ROTATION*WHEEL_CIRCUMFRANCE));
-
-    //Update the following values so that the next cycle works correctlly                 
-    ticks_per_cycle_old = ticks_per_cycle;
-    old_mills = current_mills;
 }
 
 /**
