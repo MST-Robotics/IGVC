@@ -57,8 +57,8 @@ const int ENCODER_PIN = 2;
 /**
  * @brief Pins used to control the Motor
  */
-const int REVERSE_PWM_PIN = 4;
 const int FORWARD_PWM_PIN = 5;
+const int REVERSE_PWM_PIN = 6;
 const int ENABLE_PIN = A3;
 
 /**
@@ -153,7 +153,7 @@ void loop()
     current_mills = millis();
     
     //Only update the Encoder date when the Refresh Rate says to
-    if(abs(current_mills-old_mills) >= REFRESH_RATE)
+    if(current_mills-old_mills >= REFRESH_RATE)
     {
         updateEncoder();
         old_mills = current_mills;
