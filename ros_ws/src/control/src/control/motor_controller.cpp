@@ -72,7 +72,7 @@ void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 
 void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
-    displacement_left = ((M_PI * robot_base) / encoder_res) * msg->ticks;
+    displacement_left = ((2 * M_PI * wheel_rad) / encoder_res) * msg->ticks;
 
     //Calculate rotational position of the wheel
     joint_state.position[0] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
@@ -85,7 +85,7 @@ void MotorController::leftEncoderCallback(const control::Encoder::ConstPtr& msg)
 
 void MotorController::rightEncoderCallback(const control::Encoder::ConstPtr& msg)
 {
-    displacement_right = ((M_PI * robot_base) / encoder_res) * msg->ticks;
+    displacement_right = ((2 * M_PI * wheel_rad) / encoder_res) * msg->ticks;
 
             //Calculate rotational position of the wheel
     joint_state.position[1] += ((2 * M_PI / encoder_res) * msg->ticks)  - M_PI;
