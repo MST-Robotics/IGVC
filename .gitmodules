@@ -1,0 +1,3 @@
+[submodule "ros_ws/src/arudino/razor-9dof-ahrs"]
+	path = ros_ws/src/arudino/razor-9dof-ahrs
+	url = https://github.com/MST-Robotics/razor-9dof-ahrs.git
