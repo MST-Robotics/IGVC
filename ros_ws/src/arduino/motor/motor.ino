@@ -39,8 +39,23 @@ const char* ENCODER_TOPIC = "left_tick";
  * 
  * Variable is the number of Millisecond Delay between publishes
  */
- const float REFRESH_RATE = 1000;
+ const float REFRESH_RATE_DESIRED = 1000;
  
+/******************************************************************
+ * Adjust for the changing of the arudino timer funciton to       *
+ * remove motor whine. This will only work with a divisor of 8!   *
+ * If Divisor changes, please look into how this effects arduino  *
+ * Timing Functons.                                               *
+ *                                                                *
+ * For Referance please see below website                         *
+ * http://playground.arduino.cc/Main/TimerPWMCheatsheet           *
+ * ****************************************************************/
+ //const float REFRESH_RATE = (REFRESH_RATE_DESIRED * 8);
+
+ //Replace this line with the line above it if motor whine 
+ //   is still an issue
+   const float REFRESH_RATE = (REFRESH_RATE_DESIRED);
+   
 /**
  * @brief Radians Per Second at full Throtle
  * 
@@ -60,13 +75,6 @@ const int ENCODER_PIN = 2;
 const int FORWARD_PWM_PIN = 5;
 const int REVERSE_PWM_PIN = 6;
 const int ENABLE_PIN = A3;
-
-/**
- * @brief Const used to change the Motor Whine Divisor
- * 
- * This is set to 8 for IGVC Robot
- */
-const int FREQUENCY_DIVISOR = 8;
 
 /**
  * @brief Float used to scale the Speed to
@@ -96,7 +104,7 @@ volatile unsigned int encoder_ticks = 0;
  ************************/
 void encoderCount();
 void updateEncoder();
-void set_pwm_frequency(int divisor);
+void set_pwm_frequency();
 void velocityCallback(const std_msgs::Float64& msg);
 float fScale( float originalMin, float originalMax, float newBegin, 
               float newEnd, float inputValue, float curve);
@@ -124,8 +132,7 @@ ros::Publisher encoderPub(ENCODER_TOPIC, &encoderMessage);
 void setup() 
 {
     //Fix the Motor Whine
-    //After testing on IGVC 8 gave the best results
-    set_pwm_frequency(FREQUENCY_DIVISOR);
+    //set_pwm_frequency();
 
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
@@ -152,7 +159,7 @@ void loop()
     //update the current time for multitasking
     current_mills = millis();
     
-    //Only update the Encoder date when the Refresh Rate says to
+    //Only update the Encoder data when the Refresh Rate says to
     if(current_mills-old_mills >= REFRESH_RATE)
     {
         updateEncoder();
@@ -334,37 +341,15 @@ float fScale( float original_min, float original_max, float new_begin,
 /**
  * @brief The Function will change frequency of Timer 0
  * 
- * This function accepts as input a divisor that will change
- * the frequency of the Timer that controlls the PWM signal
- *  
- * @param divisor -what we divide the timer frequency by
+ * This function will change the frequency of the Timer 
+ * that controlls the PWM signal. This will alos effect 
+ * any other functions on Timer 0
  */
-void set_pwm_frequency(int divisor) 
+void set_pwm_frequency() 
 {
-    byte mode;
-    switch(divisor) 
-    {
-      case 1: 
-          mode = 0x01; 
-          break;
-      case 8: 
-          mode = 0x02; 
-          break;
-      case 64: 
-          mode = 0x03; 
-          break;
-      case 256: 
-          mode = 0x04;
-          break;
-      case 1024: 
-          mode = 0x05; 
-          break;
-      default: 
-          return;
-    }
 
     //set mode of timer 0
-    TCCR0B = TCCR0B & 0b11111000 | mode;
+    TCCR0B = TCCR0B & 0b11111000 | 0x02;
 
     return;
 }
