@@ -48,11 +48,11 @@ void RemoteControl::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 
     if ((msg->buttons[config.speed_inc_btn] == 1) && (speed_modifier < 1))
     {
-        speed_modifier += 0.01;
+        speed_modifier += 0.1;
     }
     else if ((msg->buttons[config.speed_dec_btn] == 1) && (speed_modifier > 0))
     {
-        speed_modifier -= 0.01;
+        speed_modifier -= 0.1;
     }
     cmd_vel.linear.x = msg->axes[config.lin_vel_axis] * speed_modifier;
     cmd_vel.angular.z = msg->axes[config.ang_vel_axis];

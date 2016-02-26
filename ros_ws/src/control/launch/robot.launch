@@ -2,7 +2,7 @@
     <!-- Define arguments and defaults -->
     <arg name="robot_addr" default="localhost"/>
     <arg name="robot_launch" default="igvc.launch"/>
-    <arg name="controller_type" default="360.yaml" />
+    <arg name="controller_type" default="moga.yaml" />
     <include file="$(find control)/launch/$(arg robot_launch)" />
 
     <!-- Connect to the specified master -->
