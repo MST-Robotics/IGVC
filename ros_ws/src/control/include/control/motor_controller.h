@@ -10,7 +10,13 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float64.h>
+#include <sensor_msgs/JointState.h>
+#include <tf/transform_broadcaster.h>
+#include <nav_msgs/Odometry.h>
 #include "constants.h"
+
+/* Custom messages - This file should be Auto generated */
+#include "control/Encoder.h"
 
 class MotorController
 {
@@ -36,6 +42,11 @@ private:
     double unscaled_max_speed;
 
     /**
+     * @brief The encoder resolution in ticks/s
+     */
+    double encoder_res;
+
+    /**
      * @brief The right velocity to be published
      */
     std_msgs::Float64 right_vel;
@@ -46,9 +57,49 @@ private:
     std_msgs::Float64 left_vel;
 
     /**
+     * @brief The linear displacement of the left wheel since the last message
+     */
+    double displacement_left;
+
+    /**
+     * @brief The linear displacement of the right wheel since the last message
+     */
+    double displacement_right;
+
+    /**
+     * @brief The previous angular displacement of the robot
+     */
+    double prev_theta;
+
+    /**
+     * @brief The tf transform to be published specifying odometry
+     */
+    geometry_msgs::TransformStamped odom_trans;
+
+    /**
+     * @brief The tf broadcaster for the odom transform
+     */
+    tf::TransformBroadcaster odom_broadcaster;
+
+    /**
      * @brief The twist message subscriber
      */
     ros::Subscriber twist_sub;
+
+    /**
+     * @brief The joint state message to be published containing the left and right wheel positions
+     */
+    sensor_msgs::JointState joint_state;
+
+    /**
+     * @brief The subscriber for the left encoder
+     */
+    ros::Subscriber left_encoder;
+
+    /**
+     * @brief The subscriber for the right encoder
+     */
+    ros::Subscriber right_encoder;
 
     /**
      * @brief The right wheel velocity publisher
@@ -59,6 +110,11 @@ private:
      * @brief The left wheel velocity publisher
      */
     ros::Publisher left_vel_pub;
+
+    /**
+     * @brief The joint state publisher for the left and right wheel positions
+     */
+    ros::Publisher joint_state_pub;
 
     /**
      * @brief The ros node handle
@@ -74,6 +130,24 @@ private:
      * @param msg The message which is received from the twist publisher
      */
     void twistCallback(const geometry_msgs::Twist::ConstPtr& msg);
+
+    /**
+    * @brief The callback function for the right encoder message
+    *
+    * This function accepts Encoder messages and records the number of ticks in a time interval for the left wheel
+    *
+    * @param msg The message which is received from the right encoder publisher
+    */
+    void leftEncoderCallback(const control::Encoder::ConstPtr& msg);
+
+    /**
+     * @brief The callback function for the right encoder message
+     *
+     * This function accepts Encoder messages and records the number of ticks in a time interval for the right wheel
+     *
+     * @param msg The message which is received from the right encoder publisher
+     */
+    void rightEncoderCallback(const control::Encoder::ConstPtr& msg);
 
     /**
      * @brief Calculates the right wheel angular velocity based on a differential drive model
