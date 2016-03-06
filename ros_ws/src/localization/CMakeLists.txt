@@ -32,6 +32,7 @@ include_directories(
         include/localization/
 )
 
-add_executable(orientation_node src/localization/orientation_node.cpp)
+add_executable(orientation_node src/localization/orientation_node.cpp include/localization/orientation.h
+               src/localization/orientation.cpp)
 add_dependencies(orientation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(orientation_node ${catkin_LIBRARIES})
