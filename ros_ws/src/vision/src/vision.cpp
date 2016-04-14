@@ -20,7 +20,7 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 	//Get the image from the camera, and store it in frame
 	try
 	{
-		frame = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8);
+		frame = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
 	}
 	//Throw an error message if the camera data isn't correct
 	catch (cv_bridge::Exception& e)
@@ -37,7 +37,9 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 //Function used to process the image
 void Vision::edgeDetection()
 {
-
+    cv::threshold(frame->image,frame->image,127,255,cv::THRESH_BINARY);
+    cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
+    cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
     return;
 }
 
