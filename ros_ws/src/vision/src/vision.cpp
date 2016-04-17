@@ -12,16 +12,12 @@ Vision::Vision() : it(nh)
     //Initialize Publishers and Subscribers
     vision_sub = it.subscribe("/usb_cam/image_raw", 1, &Vision::imageCallback, this);
     vision_pub = it.advertise("processed_image", 1);
-    
-    //Used to create a window in openCV
-    cv::namedWindow("Processed Image");
 }
 
 //Destructor
 Vision::~Vision()
 {
-    //Destroy the created openCV window
-    cv::destroyWindow("Processed Image");
+  
 }
 
 //ROS Callback Function to get camera data
@@ -30,7 +26,7 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 	//Get the image from the camera, and store it in frame
 	try
 	{
-		frame = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+		frame = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
 	}
 	//Throw an error message if the camera data isn't correct
 	catch (cv_bridge::Exception& e)
@@ -48,12 +44,21 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 void Vision::edgeDetection()
 {
     cv::circle(frame->image, cv::Point((frame->image.cols/2), frame->image.rows), 500, CV_RGB(255,0,0));
-    cv::imshow("Processed Image", frame->image);
-    //cv::waitKey(0);
+    
 
-    //cv::threshold(frame->image,frame->image,127,255,cv::THRESH_BINARY);
-    //cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
-    //cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
+    cv::threshold(frame->image,frame->image,127,255,cv::THRESH_BINARY);
+    cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
+    cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
+    
+    cv::vector<cv::Vec4i> lines;
+    cv::HoughLinesP(frame->image, lines, 1, CV_PI/180, 80, 30, 10);
+    for(size_t i = 0; i < lines.size(); i++)
+    {
+        cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]), cv::Scalar(0,0,255), 3, 8);
+    }
+    
+    
+    
     return;
 }
 
