@@ -50,11 +50,11 @@ void Vision::edgeDetection()
     cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
     cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
     
-    cv::vector<cv::Vec4i> lines;
+    std::vector<cv::Vec4i> lines;
     cv::HoughLinesP(frame->image, lines, 1, CV_PI/180, 80, 30, 10);
     for(size_t i = 0; i < lines.size(); i++)
     {
-        cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]), cv::Scalar(0,0,255), 3, 8);
+        cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255,255,255), 3, 8);
     }
     
     
