@@ -43,9 +43,6 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 //Function used to process the image
 void Vision::edgeDetection()
 {
-    cv::circle(frame->image, cv::Point((frame->image.cols/2), frame->image.rows), 500, CV_RGB(255,0,0));
-    
-
     cv::threshold(frame->image,frame->image,127,255,cv::THRESH_BINARY);
     cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
     cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
@@ -57,7 +54,8 @@ void Vision::edgeDetection()
         cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255,255,255), 3, 8);
     }
     
-    
+    cv::circle(frame->image, cv::Point((frame->image.cols/2), frame->image.rows), 
+                (frame->image.cols/2), CV_RGB(255,255,255), 10);
     
     return;
 }
