@@ -12,6 +12,8 @@
 #include <sensor_msgs/image_encodings.h>
 #include <opencv/cv.h>
 #include <cv_bridge/cv_bridge.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 class Vision
 {
@@ -55,6 +57,11 @@ class Vision
          * @brief Default constructor for the Vision Class
          */
         Vision();
+        
+        /**
+         * @brief Default Destructor for the Vision Class
+         */
+        ~Vision();
     
         /**
          * @brief Function used to Find the edges in the image
