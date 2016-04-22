@@ -11,17 +11,26 @@
 #BACK_BUTTON:      6
 #START_BUTTON:     7
 #POWER_BUTTON:     8
+#UP_DPAD:          13
+#DOWN_DPAD:        14
+#RIGHT_DPAD:       12
+#LEFT_DPAD:        11
 
 
 
-controller_type:   xbox360
+controller_type:           xbox360
 
-lin_vel_axis:      1
-ang_vel_axis:      3
-teleop_btn:        0
-standby_btn:       1
+lin_vel_axis:              1
+ang_vel_axis:              3
+conveyor_speed_forward:    5
+conveyor_speed_back:       2
+teleop_btn:                0
+standby_btn:               1
 
-autonomous_btn:    3
-speed_inc_btn:     5
-speed_dec_btn:     4
-turbo_btn:         2
+autonomous_btn:            3
+speed_inc_btn:             5
+speed_dec_btn:             4
+turbo_btn:                 2
+
+actuator_up:               13
+actuator_down:             14

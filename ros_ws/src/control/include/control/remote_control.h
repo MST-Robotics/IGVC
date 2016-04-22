@@ -14,6 +14,8 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/Int8.h>
+#include <std_msgs/Float64.h>
 #include "constants.h"
 
 class RemoteControl
@@ -28,12 +30,32 @@ private:
     geometry_msgs::Twist cmd_vel;
 
     /**
+     * @brief The speed at which the actuators will run
+     *
+     * The actuators will curently work using 1 as up -1 as down and 0 as hold
+     */
+    std_msgs::Int8 actuator_speed;
+
+    std_msgs::Float64 conveyor_speed;
+
+    /**
      * @brief The twist publisher
      *
      * This ros publisher will be responsible for publishing the twist message which will eventually be sent to the
      * robot's motor controllers.
      */
     ros::Publisher twist_pub;
+
+    /**
+     * @brief The actuator publisher
+     *
+     * This ros publisher will be responsible for publishing the actuator message which will tell the actuators to go up
+     * or down.
+     */
+    ros::Publisher actuator_pub;
+
+    ros::Publisher conveyor_pub;
+
     /**
      * @brief The joy message subscriber
      *
@@ -41,6 +63,7 @@ private:
      * is being used.
      */
     ros::Subscriber joy_sub;
+
     /**
      * @brief The ros node handle
      */

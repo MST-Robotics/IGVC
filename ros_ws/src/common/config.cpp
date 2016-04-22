@@ -55,14 +55,19 @@ ConfigValues initConfigs()
     {
     	ROS_ERROR("max_ang_vel is not defined on the parameter server");
     }
+
     //controller mapping
     get_int_param("/lin_vel_axis", config.lin_vel_axis);
     get_int_param("/ang_vel_axis", config.ang_vel_axis);
+    get_int_param("conveyor_speed_forward", config.conveyor_speed_forward);
+    get_int_param("conveyor_speed_back", config.conveyor_speed_back);
     get_int_param("/teleop_btn", config.teleop_btn);
     get_int_param("/standby_btn", config.standby_btn);
     get_int_param("/autonomous_btn", config.autonomous_btn);
     get_int_param("/speed_inc_btn", config.speed_inc_btn);
     get_int_param("/speed_dec_btn", config.speed_dec_btn);
+    get_int_param("/actuator_up", config.actuator_up);
+    get_int_param("/actuator_down", config.actuator_down);
     return config;
 }
 

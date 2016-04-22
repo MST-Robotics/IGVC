@@ -29,14 +29,16 @@ double max_ang_vel;
 std::string controller_type;
 int lin_vel_axis;
 int ang_vel_axis;
+int conveyor_speed_forward;
+int conveyor_speed_back;
 int teleop_btn;
 int standby_btn;
 int autonomous_btn;
 int speed_inc_btn;
 int speed_dec_btn;
 int turbo_btn;
-
-
+int actuator_up;
+int actuator_down;
 };
 ConfigValues initConfigs();
 void get_int_param(std::string key_name, int & config_var);
