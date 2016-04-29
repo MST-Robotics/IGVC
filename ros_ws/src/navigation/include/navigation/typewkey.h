@@ -40,10 +40,24 @@ struct TypeWkey
       return *this;
     }
 
+
     int getKey() const
     {
       return m_data;
     }
 };
+
+template <typename T>
+bool operator == (const TypeWkey<T>& lhs, const TypeWkey<T>& rhs)
+{
+  return lhs.getKey() == rhs.getKey();
+}
+
+template <typename T>
+bool operator != (const TypeWkey<T>& lhs, const TypeWkey<T>& rhs)
+{
+  return !(lhs == rhs);
+}
+
 
 #endif /* TYPEWKEY_H_ */

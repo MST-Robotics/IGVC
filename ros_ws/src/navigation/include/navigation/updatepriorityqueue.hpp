@@ -67,9 +67,9 @@ void UpdatePriorityQueue<T, K>::insert(const T& item, const g_cost& cost,
 
   m_h.insert(make_pair(key, h));
   //(*m_h.find(key)).second = h;
-
+  m_id.insert(make_pair(key, size() - 1));
   size_t heap_index = m_min_heap.insert(key, m_id);
-  m_id.insert(make_pair(key, heap_index));
+  m_id[key] = heap_index;
   //cout << "H" << hueristic << endl;
   //cout << "m_g" << m_g[key] << endl;
   //cout << "m_g" << (*m_g.find(key)).second << endl;
@@ -193,7 +193,7 @@ template<typename T, typename K>
 bool UpdatePriorityQueue<T, K>::find(const T& item) const
 {
   K key = item.getKey();
-  std::unordered_map<K, size_t>::const_iterator got = m_id.find(key);
+  typename std::unordered_map<K, size_t>::const_iterator got = m_id.find(key);
 
   return (got != m_id.end()) ? true : false;
 }
@@ -239,20 +239,20 @@ bool UpdatePriorityQueue<T, K>::valid_heap()
       K key_i = m_min_heap[i];
       K key_j = m_min_heap[j];
 
-      std::cout << m_min_heap.useCompareObject(j, i) << std::endl;
-      std::cout << "comparing i position " << i << " with j position " << j << std::endl;
-      std::cout << "comparing i key " << m_min_heap[i] << " with j key"
-          << m_min_heap[j] << std::endl;
-      std::cout << "comparing h[i] " << m_h.at(key_i) << " with h[j] " << m_h.at(key_j)
-          << std::endl;
-      std::cout << "comparing g[i] " << m_g.at(key_i) << " with g[j] " << m_g.at(key_j)
-          << std::endl;
-      std::cout << "comparing f[i] " << m_g.at(key_i) + m_h.at(key_i) << " with f[j] "
-          << m_g.at(key_j) + m_h.at(key_j) << std::endl;
+      //std::cout << m_min_heap.useCompareObject(j, i) << std::endl;
+      //std::cout << "comparing i position " << i << " with j position " << j << std::endl;
+      //std::cout << "comparing i key " << m_min_heap[i] << " with j key"
+       //   << m_min_heap[j] << std::endl;
+      //std::cout << "comparing h[i] " << m_h.at(key_i) << " with h[j] " << m_h.at(key_j)
+       //   << std::endl;
+      //std::cout << "comparing g[i] " << m_g.at(key_i) << " with g[j] " << m_g.at(key_j)
+       //   << std::endl;
+      //std::cout << "comparing f[i] " << m_g.at(key_i) + m_h.at(key_i) << " with f[j] "
+        //  << m_g.at(key_j) + m_h.at(key_j) << std::endl;
       for (size_t k = 0; k < size(); k++)
       {
         K key_k = m_min_heap[k];
-        std::cout << m_min_heap[k] << " : " << m_g.at(key_k) + m_h.at(key_k) << std::endl;
+        //std::cout << m_min_heap[k] << " : " << m_g.at(key_k) + m_h.at(key_k) << std::endl;
       }
       return false;
     }

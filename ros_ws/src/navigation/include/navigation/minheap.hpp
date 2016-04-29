@@ -100,6 +100,10 @@ size_t MinHeap<T, comp_T>::heapifyUp(size_t i, unordered_map<T, size_t>& m_id)
       //std::cout << "swapping at i  = " << i << " and j = " << j << std::endl;
       //std::cout << m_heap[i] <<" , " << m_heap[j] << std::endl;
       std::swap(m_heap[i], m_heap[j]);
+      //std::cout << "i " << std::endl;
+      //std::cout << m_id.at(m_heap[i]) << std::endl;
+      //std::cout << "j " << std::endl;
+      //std::cout << m_id.at(m_heap[j]) << std::endl;
       std::swap(m_id.at(m_heap[i]), m_id.at(m_heap[j]));
       //std::cout << m_heap[i] <<" , " << m_heap[j] << std::endl;
       i = j;
@@ -417,18 +421,3 @@ ostream& operator <<(ostream& os, const MinHeap<T, comp_T>& rhs)
   return os;
 }
 
-size_t parent(size_t i)
-{
-
-  return (i ? (i - 1) : i) / 2;
-}
-
-size_t leftChild(size_t i)
-{
-  return (i * 2) + 1;
-}
-
-size_t rightChild(size_t i)
-{
-  return (i * 2) + 2;
-}

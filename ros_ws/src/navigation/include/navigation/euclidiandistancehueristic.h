@@ -10,7 +10,9 @@
 #define EUCLIDIANDISTANCEHUERISTIC_H_
 
 #include "updatepriorityqueue.h"
+#include "typewkey.h"
 #include <math.h>
+#include <cstdlib>
 
 class EuclidianDistanceHueristic
 {
@@ -26,7 +28,6 @@ class EuclidianDistanceHueristic
     }
     h_cost operator ()(const TypeWkey<size_t>& start,
         const TypeWkey<size_t>& goal) const;
-    virtual ~EuclidianDistanceHueristic();
 };
 
 #endif /* EUCLIDIANDISTANCEHUERISTIC_H_ */
