@@ -19,6 +19,8 @@ TwistMux::TwistMux()
     joy_sub = nh.subscribe<sensor_msgs::Joy>(JOY_TOPIC, 1, &TwistMux::joyCallback, this);
 
     twist_pub = nh.advertise<geometry_msgs::Twist>(CONTROL_TOPIC, 1);
+
+    light_pub = nh.advertise<std_msgs::Bool>("light_status", 1);
 }
 
 void TwistMux::update()
@@ -28,7 +30,9 @@ void TwistMux::update()
 
 void TwistMux::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
- 
+    std_msgs::Bool light_msg;
+    Control::Mode previous_mode = current_mode;
+
     if(msg->buttons[config.standby_btn] == 1)
     {
         current_mode = Control::standby;
@@ -47,6 +51,22 @@ void TwistMux::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
         stopRobot();
         twist_sub.shutdown();
     }
+
+
+    if(current_mode != previous_mode)
+    {
+        if(current_mode == Control::autonomous)
+        {
+            light_msg.data = true;
+            light_pub.publish(light_msg);
+        }
+        else
+        {
+            light_msg.data = false;
+            light_pub.publish(light_msg);
+        }
+    }   
+
 }
 
 void TwistMux::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
