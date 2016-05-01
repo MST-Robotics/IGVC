@@ -15,6 +15,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/Bool.h>
 #include "constants.h"
 
 /**
@@ -65,6 +66,13 @@ private:
      * This ros publisher is responsible for the publishing of the twist message which will control the robot.
      */
     ros::Publisher twist_pub;
+
+    /**
+     * @brief The Status Light message publisher
+     *
+     * This ros publisher is responsible for the publishing of the Status Light Message
+     */
+    ros::Publisher light_pub;
 
     /**
      * @brief The ros node handle

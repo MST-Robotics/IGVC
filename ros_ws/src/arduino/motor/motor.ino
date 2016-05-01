@@ -24,7 +24,7 @@
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define R_WHEEL
+#define L_WHEEL
 
 #if defined R_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
@@ -72,9 +72,9 @@ const int ENCODER_PIN = 2;
 /**
  * @brief Pins used to control the Motor
  */
-const int FORWARD_PWM_PIN = 5;
-const int REVERSE_PWM_PIN = 6;
-const int ENABLE_PIN = A3;
+const int FORWARD_PWM_PIN = 10;
+const int REVERSE_PWM_PIN = 9;
+const int ENABLE_PIN = 7;
 
 /**
  * @brief Float used to scale the Speed to
@@ -132,7 +132,7 @@ ros::Publisher encoderPub(ENCODER_TOPIC, &encoderMessage);
 void setup() 
 {
     //Fix the Motor Whine
-    //set_pwm_frequency();
+    set_pwm_frequency();
 
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
@@ -349,7 +349,7 @@ void set_pwm_frequency()
 {
 
     //set mode of timer 0
-    TCCR0B = TCCR0B & 0b11111000 | 0x02;
+    TCCR2B = TCCR2B & 0b11111000 | 0x02;
 
     return;
 }
