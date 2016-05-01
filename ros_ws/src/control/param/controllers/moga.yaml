@@ -13,7 +13,8 @@ controller_type:   moga
 
 lin_vel_axis:      1
 ang_vel_axis:      2
-
+conveyor_speed_forward:    4
+conveyor_speed_back:       5
 teleop_btn:        0
 standby_btn:       1
 
@@ -21,3 +22,6 @@ autonomous_btn:    3
 speed_inc_btn:     5
 speed_dec_btn:     4
 turbo_btn:         2
+
+actuator_up:               13
+actuator_down:             14

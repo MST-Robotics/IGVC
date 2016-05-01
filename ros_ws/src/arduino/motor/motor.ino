@@ -72,9 +72,9 @@ const int ENCODER_PIN = 2;
 /**
  * @brief Pins used to control the Motor
  */
-const int FORWARD_PWM_PIN = 5;
-const int REVERSE_PWM_PIN = 6;
-const int ENABLE_PIN = A3;
+const int FORWARD_PWM_PIN = 9;
+const int REVERSE_PWM_PIN = 10;
+const int ENABLE_PIN = 7;
 
 /**
  * @brief Float used to scale the Speed to
