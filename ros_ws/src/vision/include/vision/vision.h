@@ -48,6 +48,12 @@ class Vision
         cv_bridge::CvImagePtr frame;
 
         /**
+         * @brief Pointer to the incoming image
+         */
+         cv::Mat transform_matrix;
+
+
+    /**
          * @brief The callback function for the camera image
          *
          * This function accepts camera messages and throws an error if nothing is recieved
@@ -76,6 +82,12 @@ class Vision
          * @brief Function used to update the Camera
          */
         void update();
+
+        /**
+         * @brief Function used to find the camera perspective
+         */
+        cv::Mat find_perspective(float theta_x, float theta_y, float theta_z,float center_x,float center_y);
+
 
 };
 
