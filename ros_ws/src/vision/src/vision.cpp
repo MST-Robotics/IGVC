@@ -43,6 +43,10 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 //Function used to process the image
 void Vision::edgeDetection()
 {
+    //transform_matrix = find_perspective(-M_PI/256,0,M_PI, frame->image.cols/2, frame->image.rows/2);
+    //cv::warpPerspective(frame->image,frame->image,,frame->image.size());
+
+    /*
     cv::threshold(frame->image,frame->image,127,255,cv::THRESH_BINARY);
     cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
     cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
@@ -53,8 +57,8 @@ void Vision::edgeDetection()
     {
         cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255,255,255), 3, 8);
     }
-    
-    cv::circle(frame->image, cv::Point((frame->image.cols/2), frame->image.rows), 
+    */
+    cv::circle(frame->image, cv::Point((frame->image.cols/2), frame->image.rows),
                 (frame->image.cols/2), CV_RGB(255,255,255), 10);
     
     return;
@@ -71,4 +75,45 @@ void Vision::update()
     }
 
     return;   
+}
+
+
+
+//this function finds the perspective transform matrix given the angle between the two frames
+cv::Mat Vision::find_perspective(float theta_x, float theta_y, float theta_z, float center_x, float center_y)
+{
+    //these are the matricies for the transform they could be combined but
+    //I don't have my calculator or matlab and don't feel like doing it by hand
+
+    //these are the transposes
+    cv::Mat A = (cv::Mat_<float>(3, 3) <<
+            1, 0, 0,
+            0, cos(theta_x), sin(theta_x),
+            0, -sin(theta_x),  cos(theta_x));
+
+    cv::Mat B = (cv::Mat_<float>(3, 3) <<
+            cos(theta_y), 0, -sin(theta_y),
+            0, 1, 0,
+            sin(theta_y), 0, cos(theta_y));
+
+    cv::Mat C = (cv::Mat_<float>(3, 3) <<
+            cos(theta_z), sin(theta_z), 0,
+            -sin(theta_z),  cos(theta_z), 0,
+            0, 0, 1);
+
+    //shift to center
+    cv::Mat D = (cv::Mat_<float>(3, 3) <<
+            1, 0, -center_x,
+            0, 1, -center_y,
+            0, 0, 1);
+
+    cv::Mat T = A*B*C*D;
+
+    //shift back by sclaed ammounts
+    cv::Mat E = (cv::Mat_<float>(3, 3) << (T.at<float>(2,2) / T.at<float>(0,0) ), 0, center_x ,
+            0, (T.at<float>(2,2) / T.at<float>(1,1) ), center_y  , 0, 0, 1);
+
+    T = E*T;
+
+    return T;
 }
