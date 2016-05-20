@@ -18,6 +18,7 @@
 #include <opencv2/core/core.hpp>
 #include <cv.h>
 #include <vector>
+#include <fstream>
 
 class Vision
 {
@@ -46,11 +47,6 @@ class Vision
          * @brief Pointer to the incoming image
          */
         cv_bridge::CvImagePtr frame;
-
-        /**
-         * @brief Pointer to the incoming image
-         */
-         cv::Mat transform_matrix;
 
 
     /**

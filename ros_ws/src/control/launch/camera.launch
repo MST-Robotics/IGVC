@@ -10,5 +10,11 @@
 
     <param name="camera_frame_id" value="usb_cam" />
     <param name="io_method" value="mmap"/>
+
   </node>
+
+  <node pkg="vision" type="vision_node" name="vision_node"/>
+
+  <node name="rviz_robot" pkg="rqt_rviz" type="rqt_rviz" args="-d $(find control)/vcg/Pathfinder.rviz"/>
+
 </launch>

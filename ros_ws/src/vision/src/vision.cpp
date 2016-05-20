@@ -40,29 +40,76 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
     return;
 }
 
+void onClick(int event, int x, int y, int d, void* ptr)
+{
+    if(event = CV_EVENT_LBUTTONDOWN) {
+        cv::Point2f pt = cv::Point2f(x, y);
+        static_cast<std::vector<cv::Point2f>*>(ptr)->push_back(pt);
+    }
+}
+
 //Function used to process the image
 void Vision::edgeDetection()
 {
-    //transform_matrix = find_perspective(-M_PI/256,0,M_PI, frame->image.cols/2, frame->image.rows/2);
-    //cv::warpPerspective(frame->image,frame->image,,frame->image.size());
-
-    /*
-    cv::threshold(frame->image,frame->image,127,255,cv::THRESH_BINARY);
-    cv::GaussianBlur(frame->image, frame->image, cv::Size(9,9), 0, 0);
-    cv::Canny(frame->image, frame->image, 100, (100 * 3), 3);
-    
-    std::vector<cv::Vec4i> lines;
-    cv::HoughLinesP(frame->image, lines, 1, CV_PI/180, 80, 30, 10);
-    for(size_t i = 0; i < lines.size(); i++)
+    //find the perspective transform
+    if(false)
     {
-        cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255,255,255), 3, 8);
+        cv::Mat transform_matrix_to_save;
+
+        std::vector<cv::Point2f> src;
+        cv::Point2f src2[4];
+        //cv::Point2f dst[4] = {cv::Point2f(0,0),cv::Point2f(0,17),cv::Point2f(22,17),cv::Point2f(22,0)};
+
+        cv::namedWindow("Calibrate");
+        cv::imshow("Calibrate", frame->image);
+        cv::setMouseCallback("Calibrate", onClick, (&src));
+        cv::waitKey(0);
+
+        cv::destroyWindow("Calibrate");
+        if(src.size() >=4)
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                src2[i] = src[i];
+            }
+
+            float widthA = sqrt((pow((src2[2].x - src2[3].x),2)+pow((src2[2].y - src2[3].y),2)));
+            float widthB = sqrt((pow((src2[0].x - src2[1].x),2)+pow((src2[0].y - src2[1].y),2)));
+            float maxWidth = (widthA > widthB ? widthA : widthB);
+            float heightA = sqrt((pow((src2[0].x - src2[2].x),2)+pow((src2[0].y - src2[2].y),2)));
+            float heightB = sqrt((pow((src2[1].x - src2[3].x),2)+pow((src2[1].y - src2[3].y),2)));
+            float maxHeight = (heightA > heightB ? heightA : heightB);
+
+            cv::Point2f dst[4] = {cv::Point2f(0,0),cv::Point2f(maxWidth-1,0),cv::Point2f(maxWidth-1,maxHeight-1),cv::Point2f(0,maxHeight-1)};
+
+            transform_matrix_to_save = cv::getPerspectiveTransform(dst, src2);
+            std::cout << transform_matrix_to_save << std::endl;
+        }
     }
-    */
-    cv::circle(frame->image, cv::Point((frame->image.cols/2), frame->image.rows),
-                (frame->image.cols/2), CV_RGB(255,255,255), 10);
-    
+    cv::Mat M = (cv::Mat_<float>(3, 3) <<
+            1950.677379756595, -440.8234218811642, 805.9999999999999,
+    504.5687519288051, -115.4016385761404, 211.0000000000016,
+    2.414204671037371, -0.5469273216807602, 1);
+    cv::warpPerspective(frame->image,frame->image,M,frame->image.size());
+/*
+    cv::GaussianBlur(frame->image, frame->image, cv::Size(9, 9), 0, 0);
+    cv::threshold(frame->image, frame->image, 200, 255, cv::THRESH_BINARY);
+
+    cv::Canny(frame->image, frame->image, 50, 50);
+
+    std::vector<cv::Vec4i> lines;
+    cv::HoughLinesP(frame->image, lines, 1, CV_PI / 180, 50, 5, 50);
+    for (size_t i = 0; i < lines.size(); i++) {
+        cv::line(frame->image, cv::Point(lines[i][0], lines[i][1]), cv::Point(lines[i][2], lines[i][3]),
+                 cv::Scalar(255, 255, 255), 10, 8);
+    }
+
+    cv::circle(frame->image, cv::Point((frame->image.cols / 2), frame->image.rows),
+               (frame->image.cols / 2), CV_RGB(255, 255, 255), 10);
+*/
     return;
 }
+
 
 //Functions used to update ROS with the processed image
 void Vision::update()
