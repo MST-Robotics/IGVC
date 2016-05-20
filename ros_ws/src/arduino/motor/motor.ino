@@ -67,7 +67,7 @@ const float MAX_RAD_SEC = 5;
 /**
  * @brief Pin the encoder is attached
  */
-const int ENCODER_PIN = 2;
+const int ENCODER_PIN = 3;
 
 /**
  * @brief Pins used to control the Motor
@@ -91,7 +91,7 @@ float desired_direction;
 /**
  * @brief Values to be updated when the inturrupt is triggered for encoder
  */
-volatile unsigned int encoder_ticks = 0;
+volatile int encoder_ticks = 0;
 
 /**
  * @brief Values used to keep track of current time for multitasking
@@ -151,7 +151,7 @@ void setup()
     node_handle.advertise(encoderPub);
 
     //Set the Inturupt on Pin 2
-    attachInterrupt(0, encoderCount, RISING);
+    attachInterrupt(1, encoderCount, RISING);
 }
 
 void loop() 

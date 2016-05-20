@@ -40,7 +40,6 @@ ros::NodeHandle node_handle;
  */
 ros::Subscriber<std_msgs::Bool> lightSub(LIGHT_TOPIC, &lightCallback);
 
-
 void setup()
 {
     //setup pins
