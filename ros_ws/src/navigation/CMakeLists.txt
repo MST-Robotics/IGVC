@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   nav_msgs
+  tf
 )
 
 
@@ -26,7 +27,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES navigation
-  CATKIN_DEPENDS geometry_msgs roscpp sensor_msgs std_msgs nav_msgs
+  CATKIN_DEPENDS geometry_msgs roscpp sensor_msgs std_msgs nav_msgs tf
   DEPENDS system_lib
 )
 

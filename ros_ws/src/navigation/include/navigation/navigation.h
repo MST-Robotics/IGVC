@@ -10,6 +10,8 @@
 #define NAVIGATION_INCLUDE_NAVIGATION_NAVIGATION_H_
 #include <ros/ros.h>
 #include <nav_msgs/OccupancyGrid.h>
+#include <tf/transform_listener.h>
+#include <geometry_msgs/Twist.h>
 #include "astar.h"
 #include "euclidiandistancehueristic.h"
 
@@ -20,9 +22,15 @@ class Navigation
     ros::Subscriber omap_sub;
     nav_msgs::OccupancyGrid m_occupancy_grid;
 
+    ros::Publisher nav_twist_pub;
+    tf::TransformListener listener;
+    geometry_msgs::Twist nav_twist;
+
     void oMapCallback(const nav_msgs::OccupancyGrid::ConstPtr& occupancy_grid);
+
   public:
     Navigation();
+    void moveToLocation(std::pair<size_t, size_t> goal);
     void update();
 };
 
