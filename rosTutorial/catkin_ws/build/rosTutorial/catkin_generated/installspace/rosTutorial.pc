@@ -1,0 +1,8 @@
+prefix=/home/robotics/ChrisEitutis/IGVC/rosTutorial/catkin_ws/install
+
+Name: rosTutorial
+Description: Description of rosTutorial
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/robotics/ChrisEitutis/IGVC/rosTutorial/catkin_ws/install/lib 
+Requires: 

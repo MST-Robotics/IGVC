@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/robotics/ChrisEitutis/IGVC/rosTutorial/catkin_ws/devel/setup.sh
