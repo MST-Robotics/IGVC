@@ -24,7 +24,7 @@
  *  This will be used to insure that the proper wheel gets the
  *  Proper commands
  */
-#define L_WHEEL
+#define R_WHEEL
 
 #if defined R_WHEEL
 const char* VELOCITY_TOPIC = "right_vel";
@@ -50,11 +50,11 @@ const char* ENCODER_TOPIC = "left_tick";
  * For Referance please see below website                         *
  * http://playground.arduino.cc/Main/TimerPWMCheatsheet           *
  * ****************************************************************/
- //const float REFRESH_RATE = (REFRESH_RATE_DESIRED * 8);
+ const float REFRESH_RATE = (REFRESH_RATE_DESIRED * 8);
 
  //Replace this line with the line above it if motor whine 
  //   is still an issue
-   const float REFRESH_RATE = (REFRESH_RATE_DESIRED);
+ //  const float REFRESH_RATE = (REFRESH_RATE_DESIRED);
    
 /**
  * @brief Radians Per Second at full Throtle
@@ -72,8 +72,8 @@ const int ENCODER_PIN = 3;
 /**
  * @brief Pins used to control the Motor
  */
-const int FORWARD_PWM_PIN = 10;
-const int REVERSE_PWM_PIN = 9;
+const int FORWARD_PWM_PIN = 9;
+const int REVERSE_PWM_PIN = 10;
 const int ENABLE_PIN = 7;
 
 /**
@@ -91,7 +91,7 @@ float desired_direction;
 /**
  * @brief Values to be updated when the inturrupt is triggered for encoder
  */
-volatile int encoder_ticks = 0;
+volatile unsigned int encoder_ticks = 0;
 
 /**
  * @brief Values used to keep track of current time for multitasking
@@ -132,7 +132,7 @@ ros::Publisher encoderPub(ENCODER_TOPIC, &encoderMessage);
 void setup() 
 {
     //Fix the Motor Whine
-    set_pwm_frequency();
+    //set_pwm_frequency();
 
     //setup pins
     pinMode(FORWARD_PWM_PIN, OUTPUT);
@@ -151,7 +151,7 @@ void setup()
     node_handle.advertise(encoderPub);
 
     //Set the Inturupt on Pin 2
-    attachInterrupt(1, encoderCount, RISING);
+    attachInterrupt(0, encoderCount, RISING);
 }
 
 void loop() 
@@ -349,7 +349,7 @@ void set_pwm_frequency()
 {
 
     //set mode of timer 0
-    TCCR2B = TCCR2B & 0b11111000 | 0x02;
+    TCCR0B = TCCR0B & 0b11111000 | 0x02;
 
     return;
 }
