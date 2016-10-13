@@ -60,12 +60,6 @@ void Vision::edgeDetection()
         cv::Point2f src2[4];
         //cv::Point2f dst[4] = {cv::Point2f(0,0),cv::Point2f(0,17),cv::Point2f(22,17),cv::Point2f(22,0)};
 
-        cv::namedWindow("Calibrate");
-        cv::imshow("Calibrate", frame->image);
-        cv::setMouseCallback("Calibrate", onClick, (&src));
-        cv::waitKey(0);
-
-        cv::destroyWindow("Calibrate");
         if(src.size() >=4)
         {
             for(int i = 0; i < 4; i++)
