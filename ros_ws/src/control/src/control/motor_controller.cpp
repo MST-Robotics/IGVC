@@ -65,7 +65,7 @@ double MotorController::getLeftVelTank(const double left_vel)
     return scale(pre_scaled, 0, unscaled_max_speed, 0, max_speed);
 }
 
-double MotorController:getRightVelTank(const double right_vel)
+double MotorController::getRightVelTank(const double right_vel)
 {
     double pre_scaled = (2 * right_vel * robot_base) / (2 * wheel_rad);
     return scale(pre_scaled, 0, unscaled_max_speed, 0, max_speed);
