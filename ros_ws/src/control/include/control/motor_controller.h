@@ -92,6 +92,23 @@ private:
     double getLeftVel(const double lin_vel, const double ang_vel);
 
     /**
+     * @brief Calculates the right wheel angular velocity based on a differential drive model
+     * @param lin_vel The robot's linear velocity
+     * @param ang_vel The robot's angular velocity
+     * @return The right wheel's angular velocity
+     */
+    double getRightVelTank(const double lin_vel);
+
+    /**
+     * @brief Calculates the left wheel angular velocity based on a differential drive model
+     * @param lin_vel The robot's linear velocity
+     * @param ang_vel The robot's angular velocity
+     * @return The left wheel's angular velocity
+     */
+    double getLeftVelTank(const double lin_vel);
+
+
+    /**
      * @brief Scales a given double range to a new given double range
      * @param val The value to scale
      * @param pre_min The minimum value before scaling

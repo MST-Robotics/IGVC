@@ -29,7 +29,7 @@ double max_ang_vel;
 std::string controller_type;
 int left_y_axis;
 int right_x_axis;
-int right_x_axis;
+int right_y_axis;
 int teleop_btn;
 int standby_btn;
 int autonomous_btn;
