@@ -54,8 +54,12 @@ void RemoteControl::joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
     {
         speed_modifier -= 0.1;
     }
-    cmd_vel.linear.x = msg->axes[config.lin_vel_axis] * speed_modifier;
-    cmd_vel.angular.z = msg->axes[config.ang_vel_axis];
+    // linear.x is linear vel in differential mode, left vel in tank mode.
+    cmd_vel.linear.x = msg->axes[config.left_y_axis] * speed_modifier;
+    // linear.y is NOT USED in differential mode, right vel in tank mode.
+    cmd_vel.linear.y = msg->axes[config.right_y_axis] * speed_modifier;
+    // angular.z is angular vel in differential mode, NOT USED in tank mode.
+    cmd_vel.angular.z = msg->axes[config.right_x_axis];
 }
 
 void RemoteControl::update()

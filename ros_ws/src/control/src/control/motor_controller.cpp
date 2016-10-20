@@ -41,8 +41,10 @@ MotorController::MotorController()
 
 void MotorController::twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
-    right_vel.data = getRightVel(msg->linear.x, msg->angular.z);
-    left_vel.data = getLeftVel(msg->linear.x, msg->angular.z);
+    //right_vel.data = getRightVel(msg->linear.x, msg->angular.z);
+    //left_vel.data = getLeftVel(msg->linear.x, msg->angular.z);
+    left_vel.data = getLeftVelTank(msg->linear.x);
+    right_vel.data = getRightVelTank(msg->linear.y);
 }
 
 double MotorController::getRightVel(const double lin_vel, const double ang_vel)
@@ -54,6 +56,18 @@ double MotorController::getRightVel(const double lin_vel, const double ang_vel)
 double MotorController::getLeftVel(const double lin_vel, const double ang_vel)
 {
     double pre_scaled = (2 * lin_vel - ang_vel * robot_base) / (2 * wheel_rad);
+    return scale(pre_scaled, 0, unscaled_max_speed, 0, max_speed);
+}
+
+double MotorController::getLeftVelTank(const double left_vel)
+{
+    double pre_scaled = (2 * left_vel * robot_base) / (2 * wheel_rad);
+    return scale(pre_scaled, 0, unscaled_max_speed, 0, max_speed);
+}
+
+double MotorController:getRightVelTank(const double right_vel)
+{
+    double pre_scaled = (2 * right_vel * robot_base) / (2 * wheel_rad);
     return scale(pre_scaled, 0, unscaled_max_speed, 0, max_speed);
 }
 

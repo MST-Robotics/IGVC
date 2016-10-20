@@ -27,8 +27,9 @@ double max_ang_vel;
 
 //Controller Info
 std::string controller_type;
-int lin_vel_axis;
-int ang_vel_axis;
+int left_y_axis;
+int right_x_axis;
+int right_x_axis;
 int teleop_btn;
 int standby_btn;
 int autonomous_btn;
