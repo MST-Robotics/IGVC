@@ -40,51 +40,43 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
     return;
 }
 
-void onClick(int event, int x, int y, int d, void* ptr)
-{
-    if(event = CV_EVENT_LBUTTONDOWN) {
-        cv::Point2f pt = cv::Point2f(x, y);
-        static_cast<std::vector<cv::Point2f>*>(ptr)->push_back(pt);
-    }
-}
-
 //Function used to process the image
 void Vision::edgeDetection()
 {
-    //find the perspective transform
-    if(false)
-    {
-        cv::Mat transform_matrix_to_save;
 
-        std::vector<cv::Point2f> src;
-        cv::Point2f src2[4];
-        //cv::Point2f dst[4] = {cv::Point2f(0,0),cv::Point2f(0,17),cv::Point2f(22,17),cv::Point2f(22,0)};
+  int xval = 0;
+  int yval = 0;
+  int xoffset = 400;
+  int yoffset = 400;
 
-        if(src.size() >=4)
-        {
-            for(int i = 0; i < 4; i++)
-            {
-                src2[i] = src[i];
-            }
+  std::vector<cv::Point2f> points;
+  points.push_back(cv::Point2f(555,863));
+  points.push_back(cv::Point2f(1140,884));
+  points.push_back(cv::Point2f(1115,591));
+  points.push_back(cv::Point2f(682,573));
+  
+  std::vector<cv::Point2f> results;
+  results.push_back(cv::Point2f(xval,yval));
+  results.push_back(cv::Point2f(xval+xoffset,yval));
+  results.push_back(cv::Point2f(xval+xoffset,yval+yoffset));
+  results.push_back(cv::Point2f(xval,yval+yoffset));
 
-            float widthA = sqrt((pow((src2[2].x - src2[3].x),2)+pow((src2[2].y - src2[3].y),2)));
-            float widthB = sqrt((pow((src2[0].x - src2[1].x),2)+pow((src2[0].y - src2[1].y),2)));
-            float maxWidth = (widthA > widthB ? widthA : widthB);
-            float heightA = sqrt((pow((src2[0].x - src2[2].x),2)+pow((src2[0].y - src2[2].y),2)));
-            float heightB = sqrt((pow((src2[1].x - src2[3].x),2)+pow((src2[1].y - src2[3].y),2)));
-            float maxHeight = (heightA > heightB ? heightA : heightB);
+  cv::Mat source = cv::imread("/home/robotics/IGVC/ros_ws/src/vision/src/testImage.jpg");
+  
+  cv::Mat h = cv::findHomography(points, results);
+  
+  cv::Mat out;
+  
+  cv::warpPerspective(source, out, h, source.size());
+  
+  cv::namedWindow("result",  cv::WINDOW_AUTOSIZE);
+  cv::imshow("result", out);
+  
+  cv::waitKey(0);
 
-            cv::Point2f dst[4] = {cv::Point2f(0,0),cv::Point2f(maxWidth-1,0),cv::Point2f(maxWidth-1,maxHeight-1),cv::Point2f(0,maxHeight-1)};
+  
+  
 
-            transform_matrix_to_save = cv::getPerspectiveTransform(dst, src2);
-            std::cout << transform_matrix_to_save << std::endl;
-        }
-    }
-    cv::Mat M = (cv::Mat_<float>(3, 3) <<
-            1950.677379756595, -440.8234218811642, 805.9999999999999,
-    504.5687519288051, -115.4016385761404, 211.0000000000016,
-    2.414204671037371, -0.5469273216807602, 1);
-    cv::warpPerspective(frame->image,frame->image,M,frame->image.size());
 /*
     cv::GaussianBlur(frame->image, frame->image, cv::Size(9, 9), 0, 0);
     cv::threshold(frame->image, frame->image, 200, 255, cv::THRESH_BINARY);
