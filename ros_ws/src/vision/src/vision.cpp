@@ -44,16 +44,20 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 void Vision::edgeDetection()
 {
 
+/*
   int xval = 0;
   int yval = 0;
-  int xoffset = 400;
-  int yoffset = 400;
+  int xoffset = 600;
+  int yoffset = 600;
 
   std::vector<cv::Point2f> points;
-  points.push_back(cv::Point2f(555,863));
-  points.push_back(cv::Point2f(1140,884));
-  points.push_back(cv::Point2f(1115,591));
   points.push_back(cv::Point2f(682,573));
+  points.push_back(cv::Point2f(1115,591));
+  points.push_back(cv::Point2f(1140,884));
+  points.push_back(cv::Point2f(555,863));
+  
+  
+  
   
   std::vector<cv::Point2f> results;
   results.push_back(cv::Point2f(xval,yval));
@@ -73,11 +77,11 @@ void Vision::edgeDetection()
   cv::imshow("result", out);
   
   cv::waitKey(0);
-
+*/
   
   
 
-/*
+
     cv::GaussianBlur(frame->image, frame->image, cv::Size(9, 9), 0, 0);
     cv::threshold(frame->image, frame->image, 200, 255, cv::THRESH_BINARY);
 
@@ -92,7 +96,7 @@ void Vision::edgeDetection()
 
     cv::circle(frame->image, cv::Point((frame->image.cols / 2), frame->image.rows),
                (frame->image.cols / 2), CV_RGB(255, 255, 255), 10);
-*/
+
     return;
 }
 

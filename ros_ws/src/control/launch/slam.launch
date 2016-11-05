@@ -1,6 +1,7 @@
 <launch>
     <node pkg="gmapping" type="slam_gmapping" name="slam">
-        <rosparam>
+        <rosparam> 
+        <!-- Parameter List website: "wiki.ros.org/gmapping#Parameters" Ranges are in Meters -->
             map_update_interval: 1.0
             maxUrange: 30.0
             maxRange: 30.0
